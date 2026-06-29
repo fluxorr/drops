@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# Next.js and Vercel output
+.next/
+out/
+.vercel/
+
+# local environment and credentials
+.env
+.env.*
+!.env.example
+
+# tests and tooling
+coverage/
+*.tsbuildinfo
+.eslintcache
+
+# logs and local files
+*.log
+.DS_Store
+
+# Drizzle local metadata snapshots are committed; local SQLite files are not
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
