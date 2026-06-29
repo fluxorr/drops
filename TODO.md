@@ -11,7 +11,7 @@ Every checked item is completed in its own focused Git commit. Work proceeds top
 
 ## Phase 1 — Identity and personal profile
 
-- [ ] Add Clerk authentication and protected application routes
+- [x] Add Clerk authentication and protected application routes
 - [ ] Build the first-run learning profile flow
 - [ ] Add profile editing with configurable India-time defaults
 
