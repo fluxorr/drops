@@ -7,7 +7,7 @@ Every checked item is completed in its own focused Git commit. Work proceeds top
 - [x] Add the phased implementation checklist
 - [x] Capture the product and visual design system
 - [x] Add repository safeguards and environment documentation
-- [ ] Scaffold the Bun, Next.js, TypeScript, Tailwind, and test toolchain
+- [x] Scaffold the Bun, Next.js, TypeScript, Tailwind, and test toolchain
 
 ## Phase 1 — Identity and personal profile
 
