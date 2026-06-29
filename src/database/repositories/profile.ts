@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
 import { getDatabase, type Database } from "../client";
-import { profiles, settings, type NewProfile } from "../schemas";
+import { interests, profiles, settings, type NewProfile } from "../schemas";
 
 export type ProfileSetup = Pick<NewProfile, "displayName" | "learningGoal" | "background"> & {
   userId: string;
@@ -28,7 +28,11 @@ export async function getProfileWithSettings(userId: string, database: Database 
   return result;
 }
 
-export async function createProfile(setup: ProfileSetup, database: Database = getDatabase()) {
+export async function createProfile(
+  setup: ProfileSetup,
+  initialInterests: Array<{ name: string; normalizedName: string; weight: number }> = [],
+  database: Database = getDatabase(),
+) {
   const now = new Date();
 
   return database.transaction(async (transaction) => {
@@ -54,6 +58,13 @@ export async function createProfile(setup: ProfileSetup, database: Database = ge
       .insert(settings)
       .values({ userId: setup.userId })
       .onConflictDoNothing({ target: settings.userId });
+
+    if (initialInterests.length > 0) {
+      await transaction
+        .insert(interests)
+        .values(initialInterests.map((interest) => ({ ...interest, userId: setup.userId })))
+        .onConflictDoNothing({ target: [interests.userId, interests.normalizedName] });
+    }
 
     return profile;
   });
