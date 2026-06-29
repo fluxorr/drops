@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-29T15:30:00.000Z",
+  "title": "Design System: Drops",
+  "extensions": {
+    "colorMeta": {
+      "moss": {
+        "role": "primary",
+        "displayName": "Ledger Moss",
+        "canonical": "oklch(0.55 0.11 140)",
+        "tonalRamp": ["oklch(0.18 0.04 140)", "oklch(0.28 0.07 140)", "oklch(0.38 0.09 140)", "oklch(0.48 0.11 140)", "oklch(0.58 0.11 140)", "oklch(0.7 0.09 140)", "oklch(0.83 0.06 140)", "oklch(0.94 0.025 140)"]
+      },
+      "signal": {
+        "role": "secondary",
+        "displayName": "Margin Signal",
+        "canonical": "oklch(0.58 0.16 35)",
+        "tonalRamp": ["oklch(0.18 0.05 35)", "oklch(0.28 0.09 35)", "oklch(0.38 0.13 35)", "oklch(0.48 0.16 35)", "oklch(0.58 0.16 35)", "oklch(0.7 0.13 35)", "oklch(0.83 0.08 35)", "oklch(0.95 0.03 35)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page and lesson titles only." },
+      "body": { "displayName": "Reading", "purpose": "Lesson prose and interface copy." }
+    },
+    "shadows": [
+      { "name": "overlay", "value": "0 4px 8px oklch(0.12 0 0 / 0.12)", "purpose": "Temporary menus and dialogs only." }
+    ],
+    "motion": [
+      { "name": "state", "value": "180ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Control and navigation state changes." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single strong action in a region.",
+      "html": "<button class=\"ds-btn-primary\">Save changes</button>",
+      "css": ".ds-btn-primary{background:oklch(0.43 0.12 140);color:oklch(1 0 0);border:0;border-radius:8px;padding:10px 16px;font:600 14px 'Source Sans 3',sans-serif;min-height:40px;transition:background 180ms cubic-bezier(.22,1,.36,1)}.ds-btn-primary:hover{background:oklch(0.38 0.12 140)}.ds-btn-primary:focus-visible{outline:2px solid oklch(0.55 0.11 140);outline-offset:2px}"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A quiet, familiar field for profile and settings forms.",
+      "html": "<input class=\"ds-input\" value=\"Distributed systems\" aria-label=\"Interest\">",
+      "css": ".ds-input{background:oklch(1 0 0);color:oklch(0.19 0.018 140);border:1px solid oklch(0.78 0.01 140);border-radius:8px;padding:10px 12px;font:400 16px 'Source Sans 3',sans-serif}.ds-input:hover{border-color:oklch(0.6 0.03 140)}.ds-input:focus-visible{outline:2px solid oklch(0.55 0.11 140);outline-offset:2px}"
+    },
+    {
+      "name": "Ledger Entry",
+      "kind": "custom",
+      "refersTo": "ledger-entry",
+      "description": "The dated, uninterrupted unit of learning history.",
+      "html": "<article class=\"ds-ledger\"><time>29 June 2026</time><h2>Understanding io_uring</h2><p>A five-minute lesson that builds on asynchronous I/O.</p></article>",
+      "css": ".ds-ledger{color:oklch(0.19 0.018 140);border-top:1px solid oklch(0.89 0.008 140);padding:24px 0;font:400 17px/1.7 'Source Sans 3',sans-serif;max-width:68ch}.ds-ledger time{color:oklch(0.46 0.018 140);font-size:14px;font-weight:600}.ds-ledger h2{font:650 28px/1.15 Manrope,sans-serif;letter-spacing:-.025em;margin:8px 0}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Window-Side Ledger",
+    "overview": "Drops feels like a clean personal desk in gentle morning light: an open notebook, accumulated dates, and one moss-green pencil. It is quiet without becoming precious and structured without resembling a dashboard.",
+    "keyCharacteristics": ["Reading-first hierarchy with a 68ch prose measure", "Ledger-like dates, rules, and completion marks", "Restrained moss used for actions and current state only", "Flat surfaces with minimal, structural elevation", "Familiar controls and unhurried spacing"],
+    "rules": [
+      { "name": "The One Pencil Rule", "body": "Moss occupies less than ten percent of a screen and always communicates state.", "section": "colors" },
+      { "name": "The Long Read Rule", "body": "Lesson prose always uses Source Sans 3 and never exceeds 68ch.", "section": "typography" },
+      { "name": "The Bound Ledger Rule", "body": "Permanent content is separated by space and rules, not floating card shadows.", "section": "elevation" }
+    ],
+    "dos": ["Do prioritize the current lesson and keep reading text within 68ch.", "Do preserve visible keyboard focus and pair status color with text or iconography."],
+    "donts": ["Don't resemble a SaaS analytics dashboard or gamified learning product.", "Don't use decorative AI gradients, glassmorphism, or floating lesson cards."]
+  }
+}

@@ -5,7 +5,7 @@ Every checked item is completed in its own focused Git commit. Work proceeds top
 ## Phase 0 — Project foundation
 
 - [x] Add the phased implementation checklist
-- [ ] Capture the product and visual design system
+- [x] Capture the product and visual design system
 - [ ] Add repository safeguards and environment documentation
 - [ ] Scaffold the Bun, Next.js, TypeScript, Tailwind, and test toolchain
 
