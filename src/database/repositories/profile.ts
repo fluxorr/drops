@@ -83,3 +83,32 @@ export async function updateProfile(
 
   return profile;
 }
+
+export async function updateProfilePreferences(
+  userId: string,
+  profileValues: Partial<Pick<NewProfile, "displayName" | "learningGoal" | "background">>,
+  settingsValues: Partial<
+    Pick<
+      typeof settings.$inferInsert,
+      "timeZone" | "notificationTime" | "lessonsPerDay" | "theme"
+    >
+  >,
+  database: Database = getDatabase(),
+) {
+  const now = new Date();
+  return database.transaction(async (transaction) => {
+    const [profile] = await transaction
+      .update(profiles)
+      .set({ ...profileValues, updatedAt: now })
+      .where(eq(profiles.userId, userId))
+      .returning();
+
+    const [userSettings] = await transaction
+      .update(settings)
+      .set({ ...settingsValues, updatedAt: now })
+      .where(eq(settings.userId, userId))
+      .returning();
+
+    return { profile, settings: userSettings };
+  });
+}

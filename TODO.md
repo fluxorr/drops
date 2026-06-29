@@ -13,7 +13,7 @@ Every checked item is completed in its own focused Git commit. Work proceeds top
 
 - [x] Add Clerk authentication and protected application routes
 - [x] Build the first-run learning profile flow
-- [ ] Add profile editing with configurable India-time defaults
+- [x] Add profile editing with configurable India-time defaults
 
 ## Phase 2 — Remote data foundation
 

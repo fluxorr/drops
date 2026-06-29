@@ -405,6 +405,80 @@ textarea {
   opacity: 0.65;
 }
 
+.settings-page {
+  max-width: 820px;
+}
+
+.page-heading {
+  padding-bottom: 40px;
+}
+
+.page-heading > p:last-child {
+  max-width: 52ch;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.settings-form {
+  border-top: 1px solid var(--rule);
+}
+
+.settings-section {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.35fr);
+  gap: 56px;
+  padding-block: 40px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.settings-section-heading h2 {
+  margin: 0;
+  font-family: var(--font-display), ui-sans-serif, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.settings-section-heading p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.settings-fields {
+  display: grid;
+  gap: 24px;
+}
+
+.settings-fields-compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field-group select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 9px 36px 9px 12px;
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.settings-save-row {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.save-confirmation {
+  margin: 0;
+  color: var(--moss-strong);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
 @media (max-width: 760px) {
   .auth-page {
     grid-template-columns: 1fr;
@@ -434,6 +508,11 @@ textarea {
   .onboarding-intro {
     position: static;
   }
+
+  .settings-section {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
 }
 
 @media (max-width: 520px) {
@@ -459,6 +538,10 @@ textarea {
     height: 1px;
     overflow: hidden;
     clip-path: inset(50%);
+  }
+
+  .settings-fields-compact {
+    grid-template-columns: 1fr;
   }
 }
 
