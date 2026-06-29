@@ -23,7 +23,7 @@ Every checked item is completed in its own focused Git commit. Work proceeds top
 
 ## Phase 3 — Learning engine
 
-- [ ] Add the provider-neutral lesson generation contract
+- [x] Add the provider-neutral lesson generation contract
 - [ ] Add Gemini 3.5 Flash with Gemini 2.5 Pro fallback and Google Search grounding
 - [ ] Implement prerequisite-aware topic scoring and deterministic selection
 - [ ] Implement fixed-rule knowledge and confidence progression
