@@ -18,9 +18,9 @@ describe("readRemoteDatabaseEnv", () => {
   it.each(["file:local.db", ":memory:", "sqlite://local.db"])(
     "rejects local database target %s",
     (url) => {
-      expect(() =>
+      expect(
         readRemoteDatabaseEnv({ TURSO_DATABASE_URL: url, TURSO_AUTH_TOKEN: "token" }),
-      ).toThrow("remote libSQL database");
+      ).toBeNull();
     },
   );
 });

@@ -1,4 +1,4 @@
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 
 import { getDatabase, type Database } from "../client";
 import { interests } from "../schemas";
@@ -7,8 +7,11 @@ export function normalizeInterestName(name: string) {
   return name.trim().toLocaleLowerCase("en-IN").replace(/\s+/g, " ");
 }
 
-export async function listInterests(userId: string, database: Database = getDatabase()) {
-  return database
+export async function listInterests(userId: string, database?: Database | null) {
+  const db = database ?? getDatabase();
+  if (!db) return [];
+
+  return db
     .select()
     .from(interests)
     .where(and(eq(interests.userId, userId), eq(interests.isActive, true)))
@@ -18,10 +21,13 @@ export async function listInterests(userId: string, database: Database = getData
 export async function saveInterest(
   userId: string,
   value: { name: string; weight: number; pinned?: boolean },
-  database: Database = getDatabase(),
+  database?: Database | null,
 ) {
+  const db = database ?? getDatabase();
+  if (!db) return null;
+
   const normalizedName = normalizeInterestName(value.name);
-  const [interest] = await database
+  const [interest] = await db
     .insert(interests)
     .values({
       userId,
@@ -41,20 +47,38 @@ export async function saveInterest(
       },
     })
     .returning();
-
   return interest;
+}
+
+export async function touchInterests(
+  userId: string,
+  interestNames: string[],
+  database?: Database | null,
+) {
+  const db = database ?? getDatabase();
+  if (!db || interestNames.length === 0) return;
+
+  const normalized = interestNames.map((n) => normalizeInterestName(n));
+  await db
+    .update(interests)
+    .set({ lastSelectedAt: new Date(), updatedAt: new Date() })
+    .where(
+      and(eq(interests.userId, userId), inArray(interests.normalizedName, normalized)),
+    );
 }
 
 export async function removeInterest(
   userId: string,
   interestId: string,
-  database: Database = getDatabase(),
+  database?: Database | null,
 ) {
-  const [interest] = await database
+  const db = database ?? getDatabase();
+  if (!db) return null;
+
+  const [interest] = await db
     .update(interests)
     .set({ isActive: false, updatedAt: new Date() })
     .where(and(eq(interests.userId, userId), eq(interests.id, interestId)))
     .returning();
-
   return interest;
 }

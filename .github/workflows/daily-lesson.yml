@@ -1,0 +1,25 @@
+name: Generate daily lesson
+
+on:
+  schedule:
+    # 08:00 IST = 02:30 UTC
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+    inputs:
+      userId:
+        description: "Target user ID (leave empty for all)"
+        required: false
+        type: string
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Generate lesson
+        run: |
+          curl -X POST "${{ secrets.VERCEL_DEPLOYMENT_URL }}/api/send-daily?userId=${{ github.event.inputs.userId || secrets.DROPS_USER_ID }}" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            --fail-with-body

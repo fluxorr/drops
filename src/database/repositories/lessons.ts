@@ -6,8 +6,11 @@ import { lessons } from "../schemas";
 export async function listLessons(
   userId: string,
   options: { query?: string; status?: "unread" | "completed" | "skipped"; limit?: number } = {},
-  database: Database = getDatabase(),
+  database?: Database | null,
 ) {
+  const db = database ?? getDatabase();
+  if (!db) return [];
+
   const filters = [eq(lessons.userId, userId)];
 
   if (options.status) {
@@ -20,7 +23,7 @@ export async function listLessons(
     if (search) filters.push(search);
   }
 
-  return database
+  return db
     .select()
     .from(lessons)
     .where(and(...filters))
@@ -28,13 +31,15 @@ export async function listLessons(
     .limit(Math.min(options.limit ?? 50, 100));
 }
 
-export async function getLesson(userId: string, lessonId: string, database: Database = getDatabase()) {
-  const [lesson] = await database
+export async function getLesson(userId: string, lessonId: string, database?: Database | null) {
+  const db = database ?? getDatabase();
+  if (!db) return null;
+
+  const [lesson] = await db
     .select()
     .from(lessons)
     .where(and(eq(lessons.userId, userId), eq(lessons.id, lessonId)))
     .limit(1);
-
   return lesson;
 }
 
@@ -42,10 +47,13 @@ export async function setLessonStatus(
   userId: string,
   lessonId: string,
   status: "completed" | "skipped",
-  database: Database = getDatabase(),
+  database?: Database | null,
 ) {
+  const db = database ?? getDatabase();
+  if (!db) return null;
+
   const now = new Date();
-  const [lesson] = await database
+  const [lesson] = await db
     .update(lessons)
     .set({
       status,
@@ -60,6 +68,5 @@ export async function setLessonStatus(
       ),
     )
     .returning();
-
   return lesson;
 }

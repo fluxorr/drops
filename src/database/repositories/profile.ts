@@ -7,35 +7,41 @@ export type ProfileSetup = Pick<NewProfile, "displayName" | "learningGoal" | "ba
   userId: string;
 };
 
-export async function getProfile(userId: string, database: Database = getDatabase()) {
-  const [profile] = await database
+export async function getProfile(userId: string, database?: Database | null) {
+  const db = database ?? getDatabase();
+  if (!db) return null;
+
+  const [profile] = await db
     .select()
     .from(profiles)
     .where(eq(profiles.userId, userId))
     .limit(1);
-
   return profile;
 }
 
-export async function getProfileWithSettings(userId: string, database: Database = getDatabase()) {
-  const [result] = await database
+export async function getProfileWithSettings(userId: string, database?: Database | null) {
+  const db = database ?? getDatabase();
+  if (!db) return null;
+
+  const [result] = await db
     .select({ profile: profiles, settings })
     .from(profiles)
     .leftJoin(settings, eq(settings.userId, profiles.userId))
     .where(eq(profiles.userId, userId))
     .limit(1);
-
   return result;
 }
 
 export async function createProfile(
   setup: ProfileSetup,
   initialInterests: Array<{ name: string; normalizedName: string; weight: number }> = [],
-  database: Database = getDatabase(),
+  database?: Database | null,
 ) {
-  const now = new Date();
+  const db = database ?? getDatabase();
+  if (!db) return null;
 
-  return database.transaction(async (transaction) => {
+  const now = new Date();
+  return db.transaction(async (transaction) => {
     const [profile] = await transaction
       .insert(profiles)
       .values({
@@ -73,14 +79,16 @@ export async function createProfile(
 export async function updateProfile(
   userId: string,
   values: Partial<Pick<NewProfile, "displayName" | "learningGoal" | "background">>,
-  database: Database = getDatabase(),
+  database?: Database | null,
 ) {
-  const [profile] = await database
+  const db = database ?? getDatabase();
+  if (!db) return null;
+
+  const [profile] = await db
     .update(profiles)
     .set({ ...values, updatedAt: new Date() })
     .where(eq(profiles.userId, userId))
     .returning();
-
   return profile;
 }
 
@@ -93,10 +101,13 @@ export async function updateProfilePreferences(
       "timeZone" | "notificationTime" | "lessonsPerDay" | "theme"
     >
   >,
-  database: Database = getDatabase(),
+  database?: Database | null,
 ) {
+  const db = database ?? getDatabase();
+  if (!db) return null;
+
   const now = new Date();
-  return database.transaction(async (transaction) => {
+  return db.transaction(async (transaction) => {
     const [profile] = await transaction
       .update(profiles)
       .set({ ...profileValues, updatedAt: now })

@@ -15,6 +15,7 @@ export type RemoteDatabaseEnv = z.infer<typeof remoteDatabaseEnvSchema>;
 
 export function readRemoteDatabaseEnv(
   env: Record<string, string | undefined> = process.env,
-): RemoteDatabaseEnv {
-  return remoteDatabaseEnvSchema.parse(env);
+): RemoteDatabaseEnv | null {
+  const result = remoteDatabaseEnvSchema.safeParse(env);
+  return result.success ? result.data : null;
 }
