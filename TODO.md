@@ -19,7 +19,7 @@ Every checked item is completed in its own focused Git commit. Work proceeds top
 
 - [x] Define the Turso/Drizzle schema and migrations
 - [x] Add the remote database client and typed repositories
-- [ ] Implement profile, interests, settings, lessons, and concepts APIs
+- [x] Implement profile, interests, settings, lessons, and concepts APIs
 
 ## Phase 3 — Learning engine
 
