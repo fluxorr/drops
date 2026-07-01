@@ -5,6 +5,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { DecryptedText } from "@/components/bits/decrypted-text";
 import { BlurIn } from "@/components/bits/blur-in";
 import { GridBackground } from "@/components/aceternity/grid-background";
 
@@ -34,7 +35,7 @@ export default async function HomePage() {
       <header className="relative flex h-14 items-center justify-between mx-auto w-[min(100%-40px,800px)] border-b border-rule">
         <Link className="inline-flex items-center gap-2 text-[0.9375rem] font-medium text-ink no-underline transition-opacity duration-150 hover:opacity-70" href="/" aria-label="Drops home">
           <svg viewBox="0 0 28 28" className="size-[26px]" fill="none" aria-hidden="true">
-            <rect width="28" height="28" rx="5" fill="var(--color-accent)" />
+            <rect width="28" height="28" rx="6" fill="var(--color-accent)" />
             <path d="M8 6V22M8 6H14C17 6 19.5 8.5 19.5 14C19.5 19.5 17 22 14 22H8" stroke="var(--color-canvas)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           Drops
@@ -59,7 +60,9 @@ export default async function HomePage() {
             </BlurIn>
             <BlurIn delay={0.1}>
               <h1 id="welcome-title" className="text-[clamp(2.25rem,5vw,3.5rem)] font-[450] leading-[1.1] tracking-[-0.02em] text-balance">
-                Learn along a path<br />that remembers what<br />you&apos;ve seen.
+                <DecryptedText text="Learn along a path" /><br />
+                that remembers what<br />
+                you&apos;ve seen.
               </h1>
             </BlurIn>
             <BlurIn delay={0.2}>

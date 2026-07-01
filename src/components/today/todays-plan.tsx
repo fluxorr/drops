@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { SpotlightCard } from "@/components/aceternity/spotlight-card";
 import { TopicPreviewModal } from "./topic-preview-modal";
 
 type Topic = {
@@ -51,71 +52,55 @@ function getTimeGreeting(): string {
 function difficultyLabel(d: number): string {
   if (d <= 3) return "Beginner";
   if (d <= 5) return "Intermediate";
-  if (d <= 7) return "Advanced";
-  return "Expert";
-}
-
-async function fetchPlan(excludeTopicNames: string[]): Promise<PlanState> {
-  const res = await fetch("/api/plan/refresh", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ excludeTopicNames }),
-  });
-  if (!res.ok) throw new Error("Failed to refresh plan");
-  return res.json();
+  return "Advanced";
 }
 
 export function TodaysPlan({ initialPlan, profileName }: { initialPlan: PlanState; profileName: string }) {
   const [plan, setPlan] = useState(initialPlan);
-  const [checked, setChecked] = useState<string[]>(() => loadPlanState().checked ?? []);
-  const [excluded, setExcluded] = useState<string[]>(() => loadPlanState().excluded ?? []);
+  const [checked, setChecked] = useState<string[]>(() => loadPlanState().checked);
   const [resetting, setResetting] = useState<Set<string>>(new Set());
   const [previewTopic, setPreviewTopic] = useState<string | null>(null);
+  const mountedRef = useRef(false);
 
   useEffect(() => {
-    const saved = loadPlanState();
-    if (saved.excluded.length > 0) {
-      fetchPlan(saved.excluded).then((data) => {
-        setPlan({ topics: data.topics ?? [], reason: "" });
-      }).catch(() => { });
-    }
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
   }, []);
 
   const persist = useCallback((c: string[], e: string[]) => {
-    savePlanState(c, e);
+    try { savePlanState(c, e); } catch { /**/ }
   }, []);
 
-  const toggleChecked = useCallback(
-    (normalizedName: string) => {
-      setChecked((prev) => {
-        const next = prev.includes(normalizedName)
-          ? prev.filter((n) => n !== normalizedName)
-          : [...prev, normalizedName];
-        persist(next, excluded);
-        return next;
-      });
-    },
-    [excluded, persist],
-  );
+  const fetchPlan = useCallback(async (excluded: string[]): Promise<PlanState> => {
+    const res = await fetch("/api/plan/refresh", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ excluded }),
+    });
+    if (!res.ok) throw new Error("Failed to refresh plan");
+    return res.json();
+  }, []);
 
-  const replaceTopics = useCallback(
-    async (targets: string[]) => {
-      if (resetting.size > 0) return;
-      const newExcluded = [...new Set([...excluded, ...targets])];
-      setResetting(new Set(targets));
-      setExcluded(newExcluded);
-      persist(checked, newExcluded);
-      try {
-        const data = await fetchPlan(newExcluded);
+  const replaceTopics = useCallback(async (normalizedNames: string[]) => {
+    const currentExcluded = loadPlanState().excluded;
+    const newExcluded = [...new Set([...currentExcluded, ...normalizedNames])];
+    setResetting((prev) => {
+      const next = new Set(prev);
+      normalizedNames.forEach((n) => next.add(n));
+      return next;
+    });
+    persist(checked, newExcluded);
+    try {
+      const data = await fetchPlan(newExcluded);
+      if (mountedRef.current) {
         setPlan({ topics: data.topics ?? [], reason: "" });
-      } catch {
-        //
-      } finally {
-        setResetting(new Set());
       }
-    },
-    [resetting, excluded, checked, persist],
-  );
+    } catch {
+      //
+    } finally {
+      if (mountedRef.current) setResetting(new Set());
+    }
+  }, [checked, fetchPlan, persist]);
 
   const replaceOne = useCallback(
     (normalizedName: string) => replaceTopics([normalizedName]),
@@ -132,6 +117,16 @@ export function TodaysPlan({ initialPlan, profileName }: { initialPlan: PlanStat
   const allChecked = candidates.length > 0 && candidates.every((t) => checked.includes(t.normalizedName));
 
   const greeting = `${getTimeGreeting()}, ${profileName.split(" ")[0]}.`;
+
+  function toggleChecked(normalizedName: string) {
+    setChecked((prev) => {
+      const next = prev.includes(normalizedName)
+        ? prev.filter((c) => c !== normalizedName)
+        : [...prev, normalizedName];
+      persist(next, loadPlanState().excluded);
+      return next;
+    });
+  }
 
   return (
     <section aria-labelledby="plan-heading">
@@ -157,7 +152,7 @@ export function TodaysPlan({ initialPlan, profileName }: { initialPlan: PlanStat
                 <h2 className="text-sm font-medium text-ink">
                   Today&apos;s candidates
                 </h2>
-                <span className="text-sm text-muted">
+                <span className="text-sm text-muted tabular-nums">
                   {checked.length}/{candidates.length}
                 </span>
               </div>
@@ -193,75 +188,76 @@ export function TodaysPlan({ initialPlan, profileName }: { initialPlan: PlanStat
                   const isChecked = checked.includes(topic.normalizedName);
                   const isResetting = resetting.has(topic.normalizedName);
                   return (
-                    <div
-                      key={topic.name}
-                      className={`animate-fade-up rounded-xl border transition-all duration-200 ${
-                        isChecked
-                          ? "border-rule/50"
-                          : "border-rule hover:border-ink/20"
-                      }`}
-                      style={{ animationDelay: `${0.15 + i * 0.04}s` }}
-                    >
-                      <div className="flex items-start gap-3 p-4">
-                        <button
-                          type="button"
-                          onClick={() => toggleChecked(topic.normalizedName)}
-                          aria-label={`${isChecked ? "Unmark" : "Mark"} ${topic.name}`}
-                          className={`mt-0.5 grid size-4 shrink-0 place-items-center rounded border transition-all duration-150 ${
-                            isChecked
-                              ? "border-accent bg-accent text-white"
-                              : "border-rule bg-transparent hover:border-ink/40"
-                          }`}
-                        >
-                          {isChecked && (
-                            <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="2,6 5,9 10,3" />
-                            </svg>
-                          )}
-                        </button>
+                    <SpotlightCard key={topic.name}>
+                      <div
+                        className={`animate-fade-up rounded-xl border transition-all duration-200 ${
+                          isChecked
+                            ? "border-rule/50"
+                            : "border-rule hover:border-ink/20"
+                        }`}
+                        style={{ animationDelay: `${0.15 + i * 0.04}s` }}
+                      >
+                        <div className="flex items-start gap-3 p-4">
+                          <button
+                            type="button"
+                            onClick={() => toggleChecked(topic.normalizedName)}
+                            aria-label={`${isChecked ? "Unmark" : "Mark"} ${topic.name}`}
+                            className={`mt-0.5 grid size-4 shrink-0 place-items-center rounded border transition-all duration-150 ${
+                              isChecked
+                                ? "border-accent bg-accent text-white"
+                                : "border-rule bg-transparent hover:border-ink/40"
+                            }`}
+                          >
+                            {isChecked && (
+                              <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="2,6 5,9 10,3" />
+                              </svg>
+                            )}
+                          </button>
 
-                        <button
-                          type="button"
-                          onClick={() => setPreviewTopic(topic.name)}
-                          className="flex-1 min-w-0 text-left bg-transparent border-0 cursor-pointer"
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <span className={`text-sm font-medium ${isChecked ? "text-muted line-through" : "text-ink"}`}>
-                              {topic.name}
-                            </span>
-                            <div className="flex items-center gap-2 shrink-0">
-                              <span className="rounded border border-rule bg-surface px-1.5 py-0.5 text-[0.6875rem] font-medium text-muted">
-                                {difficultyLabel(topic.desiredDifficulty)}
+                          <button
+                            type="button"
+                            onClick={() => setPreviewTopic(topic.name)}
+                            className="flex-1 min-w-0 text-left bg-transparent border-0 cursor-pointer"
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span className={`text-sm font-medium ${isChecked ? "text-muted line-through" : "text-ink"}`}>
+                                {topic.name}
                               </span>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <span className="rounded border border-rule bg-surface px-1.5 py-0.5 text-[0.6875rem] font-medium text-muted">
+                                  {difficultyLabel(topic.desiredDifficulty)}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                          <p className={`mt-0.5 text-sm leading-[1.6] line-clamp-2 ${isChecked ? "text-muted/60" : "text-muted"}`}>
-                            {topic.reason}
-                          </p>
-                        </button>
+                            <p className={`mt-0.5 text-sm leading-[1.6] line-clamp-2 ${isChecked ? "text-muted/60" : "text-muted"}`}>
+                              {topic.reason}
+                            </p>
+                          </button>
 
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => replaceOne(topic.normalizedName)}
-                          disabled={resetting.size > 0}
-                          aria-label={`Replace ${topic.name}`}
-                          className="shrink-0 h-7"
-                        >
-                          <span className="inline-flex items-center gap-1">
-                            {isResetting && <span className="size-2.5 rounded-full border-[1.5px] border-muted/30 border-t-muted animate-spin" />}
-                            {isResetting ? "..." : "Replace"}
-                          </span>
-                        </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => replaceOne(topic.normalizedName)}
+                            disabled={resetting.size > 0}
+                            aria-label={`Replace ${topic.name}`}
+                            className="shrink-0 h-7"
+                          >
+                            <span className="inline-flex items-center gap-1">
+                              {isResetting && <span className="size-2.5 rounded-full border-[1.5px] border-muted/30 border-t-muted animate-spin" />}
+                              {isResetting ? "..." : "Replace"}
+                            </span>
+                          </Button>
+                        </div>
                       </div>
-                    </div>
+                    </SpotlightCard>
                   );
                 })
               )}
             </div>
 
             {allChecked && (
-              <div className="animate-fade-up mt-5 rounded-xl border border-rule bg-surface px-4 py-3">
+              <div className="animate-fade-up mt-5 rounded-xl border border-rule/50 bg-surface px-4 py-3">
                 <p className="text-sm font-medium text-ink">
                   All reviewed. Your notification will arrive at your scheduled time.
                 </p>
@@ -274,12 +270,6 @@ export function TodaysPlan({ initialPlan, profileName }: { initialPlan: PlanStat
               </p>
             )}
           </div>
-
-          <TopicPreviewModal
-            topicName={previewTopic ?? ""}
-            open={previewTopic !== null}
-            onClose={() => setPreviewTopic(null)}
-          />
         </>
       ) : (
         <div className="animate-fade-up">
@@ -293,6 +283,14 @@ export function TodaysPlan({ initialPlan, profileName }: { initialPlan: PlanStat
             No candidates right now. Check your interests or try replacing them.
           </p>
         </div>
+      )}
+
+      {previewTopic && (
+        <TopicPreviewModal
+          topicName={previewTopic}
+          open={!!previewTopic}
+          onClose={() => setPreviewTopic(null)}
+        />
       )}
     </section>
   );

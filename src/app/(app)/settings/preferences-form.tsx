@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useCallback } from "react";
 
 import type { Profile, Settings } from "@/database/schemas";
 
@@ -26,9 +26,16 @@ function ErrorText({ errors }: { errors?: string[] }) {
 export function PreferencesForm({ profile, settings }: { profile: Profile; settings: Settings }) {
   const [state, action, pending] = useActionState<PreferencesState, FormData>(savePreferences, {});
   const [notificationTime, setNotificationTime] = useState(settings.notificationTime);
+  const [lessonsPerDay, setLessonsPerDay] = useState(String(settings.lessonsPerDay));
+
+  const formAction = useCallback(async (formData: FormData) => {
+    formData.set("notificationTime", notificationTime);
+    formData.set("lessonsPerDay", lessonsPerDay);
+    return action(formData);
+  }, [action, notificationTime, lessonsPerDay]);
 
   return (
-    <form action={action} className="flex flex-col gap-10">
+    <form action={formAction} className="flex flex-col gap-10">
       <section aria-labelledby="profile-settings-heading">
         <div className="mb-5">
           <h2 id="profile-settings-heading" className="text-base font-medium text-ink">Learning profile</h2>
@@ -65,25 +72,16 @@ export function PreferencesForm({ profile, settings }: { profile: Profile; setti
             <Label>Notification time</Label>
             <TimePicker
               value={notificationTime}
-              onChange={(v) => {
-                setNotificationTime(v);
-                // Sync to hidden input for form submission
-                const input = document.getElementById("notificationTime") as HTMLInputElement;
-                if (input) input.value = v;
-              }}
+              onChange={setNotificationTime}
             />
-            <input type="hidden" id="notificationTime" name="notificationTime" value={notificationTime} />
-            <p className="text-xs text-muted">Asia/Kolkata (IST)</p>
+            <p className="text-xs text-muted">Asia/Kolkata (IST), 15-minute intervals</p>
             <ErrorText errors={state.errors?.notificationTime} />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="lessonsPerDay">Lessons per day</Label>
-            <Select
-              name="lessonsPerDay"
-              defaultValue={String(settings.lessonsPerDay)}
-            >
-              <SelectTrigger id="lessonsPerDay" className="w-full">
-                <SelectValue placeholder="Select" />
+            <Label htmlFor="lessonsPerDay-select">Lessons per day</Label>
+            <Select value={lessonsPerDay} onValueChange={setLessonsPerDay}>
+              <SelectTrigger id="lessonsPerDay-select" className="w-full">
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {[1, 2, 3, 4, 5].map((count) => (
@@ -93,6 +91,7 @@ export function PreferencesForm({ profile, settings }: { profile: Profile; setti
                 ))}
               </SelectContent>
             </Select>
+            <input type="hidden" name="lessonsPerDay" value={lessonsPerDay} />
             <ErrorText errors={state.errors?.lessonsPerDay} />
           </div>
         </div>

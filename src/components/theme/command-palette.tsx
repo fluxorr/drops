@@ -10,7 +10,6 @@ import {
   Search,
   Sun,
   Moon,
-  Laptop,
   ArrowRight,
 } from "lucide-react";
 import { useTheme } from "next-themes";
