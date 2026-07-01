@@ -20,7 +20,7 @@ export async function listInterests(userId: string, database?: Database | null) 
 
 export async function saveInterest(
   userId: string,
-  value: { name: string; weight: number; pinned?: boolean },
+  value: { name: string; weight: number; pinned?: boolean; subtopics?: string[] | null },
   database?: Database | null,
 ) {
   const db = database ?? getDatabase();
@@ -35,6 +35,7 @@ export async function saveInterest(
       normalizedName,
       weight: value.weight,
       pinned: value.pinned ?? false,
+      subtopics: value.subtopics ?? null,
     })
     .onConflictDoUpdate({
       target: [interests.userId, interests.normalizedName],
@@ -43,6 +44,7 @@ export async function saveInterest(
         weight: value.weight,
         pinned: value.pinned ?? false,
         isActive: true,
+        subtopics: value.subtopics ?? null,
         updatedAt: new Date(),
       },
     })

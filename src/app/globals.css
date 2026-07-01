@@ -1,48 +1,35 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
-
 :root {
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme {
-  --color-canvas: oklch(0.99 0.003 84);
-  --color-surface: oklch(0.966 0.007 89);
-  --color-ink: oklch(0.18 0.016 140);
-  --color-muted: oklch(0.47 0.016 140);
-  --color-rule: oklch(0.88 0.01 89);
-  --color-moss: oklch(0.57 0.11 145);
-  --color-moss-strong: oklch(0.43 0.13 145);
-  --color-signal: oklch(0.57 0.17 32);
-  --color-shadow: oklch(0 0 0 / 0.05);
+  --color-canvas: oklch(0.985 0 0);
+  --color-surface: oklch(0.96 0 0);
+  --color-ink: oklch(0.13 0 0);
+  --color-muted: oklch(0.5 0 0);
+  --color-rule: oklch(0.88 0 0);
+  --color-accent: oklch(0.2 0 0);
+  --color-accent-faint: oklch(0.2 0 0 / 0.08);
+  --color-signal: oklch(0.5 0.16 30);
+  --color-green: oklch(0.45 0.12 145);
 
-  --font-display: "Manrope", ui-sans-serif, sans-serif;
-  --font-body: "Source Sans 3", ui-sans-serif, sans-serif;
-}
-
-@theme dark {
-  --color-canvas: oklch(0.115 0.006 140);
-  --color-surface: oklch(0.17 0.008 140);
-  --color-ink: oklch(0.94 0.008 140);
-  --color-muted: oklch(0.72 0.014 140);
-  --color-rule: oklch(0.27 0.012 140);
-  --color-moss: oklch(0.74 0.1 145);
-  --color-moss-strong: oklch(0.6 0.12 145);
-  --color-shadow: oklch(0 0 0 / 0.2);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --color-canvas: oklch(0.115 0.006 140);
-    --color-surface: oklch(0.17 0.008 140);
-    --color-ink: oklch(0.94 0.008 140);
-    --color-muted: oklch(0.72 0.014 140);
-    --color-rule: oklch(0.27 0.012 140);
-    --color-moss: oklch(0.74 0.1 145);
-    --color-moss-strong: oklch(0.6 0.12 145);
-    --color-shadow: oklch(0 0 0 / 0.2);
+  :root {
+    --color-canvas: oklch(0.13 0 0);
+    --color-surface: oklch(0.17 0 0);
+    --color-ink: oklch(0.92 0 0);
+    --color-muted: oklch(0.6 0 0);
+    --color-rule: oklch(0.24 0 0);
+    --color-accent: oklch(0.85 0 0);
+    --color-accent-faint: oklch(0.85 0 0 / 0.1);
+    --color-signal: oklch(0.65 0.16 30);
+    --color-green: oklch(0.55 0.12 145);
   }
 }
 
@@ -59,23 +46,80 @@ body {
   margin: 0;
   background: var(--color-canvas);
   color: var(--color-ink);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
 }
 
 ::selection {
-  background: color-mix(in oklch, var(--color-moss) 20%, transparent);
+  background: var(--color-accent-faint);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-moss);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 6px;
+}
+
+.label-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.input-base {
+  height: 2.5rem;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--color-rule);
+  background: transparent;
+  padding: 0 0.75rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+.input-base:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-faint);
+}
+
+.textarea-base {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--color-rule);
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+.textarea-base:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-faint);
+}
+
+.select-base {
+  height: 2.5rem;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--color-rule);
+  background: transparent;
+  padding: 0 0.75rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+.select-base:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-faint);
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -84,29 +128,24 @@ body {
   to { opacity: 1; }
 }
 
-@keyframes scale-in {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
-}
-
 @keyframes slide-down {
-  from { opacity: 0; transform: translateY(-8px); }
+  from { opacity: 0; transform: translateY(-6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes spring-up {
-  0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-  60% { transform: translateY(-4px) scale(1.01); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse-dot {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.3); }
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
-@keyframes check-draw {
-  to { stroke-dashoffset: 0; }
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes shimmer {
@@ -114,32 +153,41 @@ body {
   100% { background-position: 200% 0; }
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .animate-fade-up {
-  animation: fade-up 0.5s var(--ease-out-expo) both;
+  animation: fade-up 0.4s var(--ease-out-expo) both;
 }
 
 .animate-fade-in {
-  animation: fade-in 0.4s ease-out both;
+  animation: fade-in 0.3s ease-out both;
 }
 
-.animate-scale-in {
-  animation: scale-in 0.4s var(--ease-out-quart) both;
+.animate-fade-out {
+  animation: fade-out 0.2s ease-out both;
 }
 
 .animate-slide-down {
-  animation: slide-down 0.35s var(--ease-out-expo) both;
+  animation: slide-down 0.3s var(--ease-out-expo) both;
 }
 
-.animate-spring-up {
-  animation: spring-up 0.6s var(--ease-out-expo) both;
+.animate-slide-up {
+  animation: slide-up 0.3s var(--ease-out-expo) both;
 }
 
-.animate-check-draw {
-  animation: check-draw 0.3s var(--ease-out-expo) 0.15s forwards;
+.animate-scale-in {
+  animation: scale-in 0.3s var(--ease-out-quart) both;
+}
+
+.animate-spin {
+  animation: spin 0.6s linear infinite;
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent 0%, var(--color-surface) 50%, transparent 100%);
+  background-color: var(--color-rule);
+  background-image: linear-gradient(90deg, transparent 0%, var(--color-surface) 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 }

@@ -71,19 +71,22 @@ export function PushSubscriptionManager() {
   }
 
   if (permission === "granted") {
-    return <p className="text-sm font-semibold text-moss-strong">&#x2713; Notifications enabled</p>;
+    return <p className="text-sm font-medium text-green">&check; Notifications enabled</p>;
   }
-
-  const btnBase = "inline-flex min-h-10 items-center justify-center gap-2 rounded-[8px] border-0 bg-surface px-4 py-2.5 text-[0.9375rem] font-[650] leading-[1.25] text-inherit no-underline cursor-pointer transition-[background] duration-180 hover:brightness-95 disabled:opacity-65 disabled:cursor-not-allowed";
 
   return (
     <button
       type="button"
-      className={btnBase}
+      className="inline-flex h-9 items-center justify-center rounded-md border border-rule bg-transparent px-3.5 text-[0.8125rem] font-medium text-ink cursor-pointer transition-all duration-150 hover:bg-surface active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
       onClick={subscribe}
       disabled={saving}
     >
-      {saving ? "Enabling\u2026" : "Enable push notifications"}
+      {saving ? (
+        <span className="inline-flex items-center gap-2">
+          <span className="size-3.5 rounded-full border-[1.5px] border-muted/30 border-t-muted animate-spin" />
+          Enabling
+        </span>
+      ) : "Enable push notifications"}
     </button>
   );
 }

@@ -72,12 +72,33 @@ export const interests = sqliteTable(
     pinned: integer("pinned", { mode: "boolean" }).notNull().default(false),
     isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
     lastSelectedAt: integer("last_selected_at", { mode: "timestamp_ms" }),
+    subtopics: text("subtopics", { mode: "json" }).$type<string[]>(),
     ...timestamps,
   },
   (table) => [
     uniqueIndex("interests_user_normalized_name_unique").on(table.userId, table.normalizedName),
     index("interests_user_active_idx").on(table.userId, table.isActive),
     check("interests_weight_check", sql`${table.weight} between 0 and 100`),
+  ],
+);
+
+export const topicPreviews = sqliteTable(
+  "topic_previews",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID())
+      .notNull(),
+    userId: text("user_id")
+      .references(() => profiles.userId, { onDelete: "cascade" })
+      .notNull(),
+    topicName: text("topic_name").notNull(),
+    previewData: text("preview_data", { mode: "json" }).notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("topic_previews_user_topic_unique").on(table.userId, table.topicName),
   ],
 );
 

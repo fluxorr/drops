@@ -6,45 +6,60 @@ import { generatedLessonPayloadSchema } from "./schema";
 import type { GeneratedLesson, LessonGenerationContext } from "./types";
 
 function buildPrompt(context: LessonGenerationContext): string {
-  return `You are a thoughtful mentor teaching one concise lesson. The learner trusts you to choose and explain what matters next.
+  return `You are a senior engineer crafting a single focused lesson. The learner trusts you to pick exactly what they need to study next and teach it with clarity and depth.
 
-## Learner profile
+## Learner
 - Name: ${context.learner.displayName}
 - Goal: ${context.learner.learningGoal}
 - Background: ${context.learner.background ?? "Not specified"}
 
-## Selected topic
-- Topic: ${context.selectedTopic.name}
-- Why this was chosen: ${context.selectedTopic.reason}
-- Desired difficulty (1-10): ${context.selectedTopic.desiredDifficulty}
+## Topic
+- Area: ${context.selectedTopic.name}
+- Why selected: ${context.selectedTopic.reason}
+- Difficulty target (1-10): ${context.selectedTopic.desiredDifficulty}
 
-## Known knowledge (concept → knowledge score / 100)
-${context.knowledge.map((k) => `- ${k.name}: ${k.knowledgeScore} knowledge, ${k.confidenceScore} confidence`).join("\n")}
+## Known concepts
+${context.knowledge.map((k) => `- ${k.name}: ${k.knowledgeScore}/100 knowledge, ${k.confidenceScore}/100 confidence`).join("\n")}
 
-## Active interests
-${context.interests.map((i) => `- ${i.name} (weight: ${i.weight})`).join("\n")}
+## Interest areas
+${context.interests.map((i) => `- ${i.name}`).join("\n")}
 
-## Recent lesson history
+## Recent lessons
 ${context.recentLessons.map((l) => `- "${l.title}" (${l.status})`).join("\n")}
 
-## Task
-Generate a ${context.targetMinutes}-minute lesson on "${context.selectedTopic.name}" that builds on existing knowledge.
+## Instructions
+
+The selected topic "${context.selectedTopic.name}" is an area of interest, not a specific lesson topic. Your job:
+
+1. Decide on one concrete, narrowly-scoped sub-topic within this area that best fits the learner's current knowledge, recent history, and stated interests.
+2. Teach that sub-topic in a ${context.targetMinutes}-minute lesson.
+3. The title MUST name the specific sub-topic (e.g. "B-Tree Balancing Strategies" not "Database Internals").
+
+### Content quality guidelines
+- Start with a crisp, motivating introduction that frames why this matters
+- Use concrete examples, diagrams described in words, or analogies
+- Every paragraph should teach something specific — avoid filler or generalities
+- For difficulty 1-4: build intuition first, avoid jargon, use simple analogies
+- For difficulty 5-7: teach the core mechanism, reference prerequisites, include a worked example
+- For difficulty 8-10: dive into trade-offs, edge cases, and real-world considerations
+- End with a summary that connects back to the learner's broader interests
+- Keep the lesson tight — every sentence should pull weight
 
 Respond with valid JSON only using this exact schema:
 {
-  "title": "string (4-120 chars, clear and specific)",
-  "whyThisLesson": "string (20-320 chars explaining why this lesson follows from the learner's knowledge and interests)",
-  "contentMarkdown": "string (500-12000 chars of exceptional lesson content in Markdown - comprehensive, insightful, and well-structured)",
+  "title": "string (4-120 chars — name the specific sub-topic, not the broad area)",
+  "whyThisLesson": "string (20-320 chars explaining why this specific sub-topic was chosen given the learner's knowledge, recent history, and interests)",
+  "contentMarkdown": "string (500-12000 chars of lesson content in Markdown — well-structured with headings, examples, and clear explanations)",
   "readMinutes": number (3-10, integer),
   "concepts": [
     {
-      "name": "string (2-100 chars)",
+      "name": "string (2-100 chars — each concept introduced in this lesson)",
       "description": "string (10-300 chars)",
       "isPrimary": boolean,
       "suggestedKnowledgeDelta": number (1-10, integer)
     }
   ],
-  "suggestedNextConcepts": ["string (2-100 chars)"]
+  "suggestedNextConcepts": ["string (2-100 chars — logical next topics for follow-up lessons)"]
 }`;
 }
 

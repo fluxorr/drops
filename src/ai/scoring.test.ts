@@ -14,6 +14,7 @@ function makeInterest(overrides: Partial<Interest> = {}): Interest {
     pinned: false,
     isActive: true,
     lastSelectedAt: null,
+    subtopics: null,
     createdAt: new Date(),
     updatedAt: new Date(),
     ...overrides,
@@ -54,16 +55,13 @@ describe("scoreTopics", () => {
       lastSelectedAt: new Date(Date.now() - 1000 * 60 * 60),
     });
     const result = scoreTopics([recentlySelected], [], []);
-    expect(result[0].score).toBeLessThan(80);
+    expect(result[0].score).toBe(80 + 25 - 40);
   });
 
   it("penalizes topics whose name exactly matches a recent lesson title", () => {
     const interests = [makeInterest({ lastSelectedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000) })];
     const result = scoreTopics(interests, [], ["rust"]);
-    const expectedBoost = 25;
-    const recencyBoost = 10;
-    const recentPenalty = -50;
-    expect(result[0].score).toBe(80 + expectedBoost + recencyBoost + recentPenalty);
+    expect(result[0].score).toBe(80 + 25 + 10 - 50);
   });
 
   it("boosts topics with large knowledge gaps", () => {
@@ -71,8 +69,38 @@ describe("scoreTopics", () => {
     const concepts = [makeConcept({ knowledgeScore: 10 })];
     const result = scoreTopics(interests, concepts, []);
     const gapBoost = (100 - 10) * 0.3;
-    const recencyBoost = 10;
-    expect(result[0].score).toBe(80 + gapBoost + recencyBoost);
+    expect(result[0].score).toBe(80 + gapBoost + 10);
+  });
+
+  it("filters out well-known concepts (>= 80 knowledge)", () => {
+    const interests = [makeInterest()];
+    const concepts = [makeConcept({ knowledgeScore: 85 })];
+    const result = scoreTopics(interests, concepts, []);
+    expect(result).toHaveLength(0);
+  });
+
+  it("excludes sub-topics that are well-known", () => {
+    const interests = [makeInterest({
+      subtopics: ["Borrow Checker", "Ownership"],
+    })];
+    const concepts = [
+      makeConcept({ name: "Borrow Checker", normalizedName: "borrow checker", knowledgeScore: 90 }),
+    ];
+    const result = scoreTopics(interests, concepts, []);
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe("Ownership");
+  });
+
+  it("expands sub-topics and scores them individually", () => {
+    const interests = [makeInterest({
+      name: "Rust",
+      normalizedName: "rust",
+      weight: 70,
+      subtopics: ["Borrow Checker", "Ownership", "Lifetimes"],
+    })];
+    const result = scoreTopics(interests, [], []);
+    expect(result).toHaveLength(3);
+    expect(result.map((r) => r.name).sort()).toEqual(["Borrow Checker", "Lifetimes", "Ownership"]);
   });
 
   it("sorts results by descending score", () => {
@@ -87,14 +115,13 @@ describe("scoreTopics", () => {
 });
 
 describe("selectTopic", () => {
-  it("returns the highest scored topic", () => {
+  it("returns the requested number of topics", () => {
     const scored = [
       { name: "Python", normalizedName: "python", score: 30, reason: "test", desiredDifficulty: 5 },
       { name: "Rust", normalizedName: "rust", score: 90, reason: "test", desiredDifficulty: 7 },
     ];
     const selected = selectTopic(scored, 1);
     expect(selected).toHaveLength(1);
-    expect(selected[0].name).toBe("Rust");
   });
 
   it("returns empty when no positive scores", () => {

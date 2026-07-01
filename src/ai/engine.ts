@@ -1,11 +1,12 @@
 import { getDatabase, type Database } from "@/database/client";
 import { listConcepts } from "@/database/repositories/concepts";
-import { listInterests, touchInterests } from "@/database/repositories/interests";
+import { listInterests, saveInterest, touchInterests } from "@/database/repositories/interests";
 import { listLessons } from "@/database/repositories/lessons";
 import { getProfile } from "@/database/repositories/profile";
 import { getSettings } from "@/database/repositories/settings";
-import { lessonConcepts, lessons } from "@/database/schemas";
+import { lessonConcepts, lessons, type Concept, type Interest } from "@/database/schemas";
 
+import { expandInterest } from "./subtopics";
 import { openRouterProvider } from "./openrouter";
 import { generateLesson } from "./provider";
 import { seedOrCreateConcepts } from "./progression";
@@ -36,14 +37,15 @@ export async function getTodaysPlan(
   if (recentLessons.length > 0) return { topics: [], reason: "Unread lesson waiting" };
   if (interests.length === 0) return { topics: [], reason: "No interests configured" };
 
-  const allScored = scoreTopics(interests, concepts, recentLessons.map((l) => l.title));
-  const filtered = allScored.filter((t) => !excludeTopicNames.includes(t.normalizedName));
-  const selected = selectTopic(filtered, 1);
-  const reason = selected.length > 0
-    ? selected[0].reason
-    : "No topics scored high enough";
+  refreshStaleSubtopics(userId, interests, concepts).catch(() => {});
 
-  return { topics: filtered, reason };
+  const allScored = scoreTopics(interests, concepts, recentLessons.map((l) => l.title));
+  let filtered = allScored.filter((t) => !excludeTopicNames.includes(t.normalizedName));
+
+  const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+  filtered = shuffled.slice(0, 5);
+
+  return { topics: filtered, reason: "" };
 }
 
 export async function generateDailyLesson(
@@ -95,7 +97,8 @@ export async function generateDailyLesson(
   }
 
   const topic = selected[0];
-  await touchInterests(userId, [topic.normalizedName], db);
+  const touchName = topic.parentInterestName ?? topic.normalizedName;
+  await touchInterests(userId, [touchName], db);
 
   const context = {
     learner: {
@@ -165,4 +168,46 @@ export async function generateDailyLesson(
   }
 
   return { lesson: { ...generated, id: lessonId }, skipped: false, reason: topic.reason };
+}
+
+async function refreshStaleSubtopics(
+  userId: string,
+  interests: Interest[],
+  concepts: Concept[],
+) {
+  const cooldownMs = 24 * 60 * 60 * 1000;
+  const now = Date.now();
+
+  for (const interest of interests) {
+    if (!interest.subtopics || interest.subtopics.length < 5) continue;
+
+    const lastUpdate = interest.updatedAt?.getTime() ?? 0;
+    if (now - lastUpdate < cooldownMs) continue;
+
+    const learnedNames: string[] = [];
+    for (const sub of interest.subtopics) {
+      const c = concepts.find(
+        (con) => con.normalizedName === sub.toLocaleLowerCase("en-IN").trim(),
+      );
+      if (c && c.knowledgeScore >= 80) learnedNames.push(sub);
+    }
+
+    const usageRatio = learnedNames.length / interest.subtopics.length;
+    if (usageRatio < 0.6) continue;
+
+    console.log(`[engine] Auto-refreshing "${interest.name}" — ${learnedNames.length}/${interest.subtopics.length} sub-topics learned (${Math.round(usageRatio * 100)}%)`);
+
+    try {
+      const newSubtopics = await expandInterest(interest.name, learnedNames);
+      await saveInterest(userId, {
+        name: interest.name,
+        weight: interest.weight,
+        pinned: interest.pinned,
+        subtopics: newSubtopics,
+      });
+      console.log(`[engine] Refreshed "${interest.name}" → ${newSubtopics.length} new sub-topics`);
+    } catch (e) {
+      console.warn(`[engine] Failed to refresh "${interest.name}":`, e);
+    }
+  }
 }

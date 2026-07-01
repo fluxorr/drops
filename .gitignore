@@ -9,8 +9,6 @@ out/
 # local environment and credentials
 .env
 .env.*
-!.env.example
-.env.example
 
 # tests and tooling
 coverage/

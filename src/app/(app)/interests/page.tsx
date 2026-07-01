@@ -20,9 +20,9 @@ export default async function InterestsPage() {
   return (
     <div aria-labelledby="interests-heading">
       <div className="mb-8">
-        <p className="mb-1 text-sm font-semibold tracking-wide text-moss-strong">Topics</p>
-        <h1 id="interests-heading" className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-[700] leading-[1.04] -tracking-[0.025em] text-balance mt-1">Interests</h1>
-        <p className="mt-3 max-w-[52ch] text-[1.0625rem] leading-[1.75] text-muted">Topics you want to learn about. Drops scores and selects the most relevant topic for each daily lesson.</p>
+        <p className="label-eyebrow">Topics</p>
+        <h1 id="interests-heading" className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-[450] leading-[1.1] tracking-[-0.02em] text-balance mt-1">Interests</h1>
+        <p className="mt-2 max-w-[52ch] text-base leading-[1.7] text-muted">Topics you want to learn about. Drops scores and selects the most relevant topic for each daily lesson.</p>
       </div>
       <InterestsManager initialInterests={interests} />
     </div>

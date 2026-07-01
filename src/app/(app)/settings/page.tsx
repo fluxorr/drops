@@ -17,9 +17,9 @@ export default async function SettingsPage() {
   return (
     <div>
       <header className="mb-8">
-        <p className="mb-1 text-sm font-semibold tracking-wide text-moss-strong">Preferences</p>
-        <h1 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-[700] leading-[1.04] -tracking-[0.025em] text-balance mt-1">Settings</h1>
-        <p className="mt-3 max-w-[52ch] text-[1.0625rem] leading-[1.75] text-muted">Keep the profile useful and choose when Drops should arrive.</p>
+        <p className="label-eyebrow">Preferences</p>
+        <h1 className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-[450] leading-[1.1] tracking-[-0.02em] text-balance mt-1">Settings</h1>
+        <p className="mt-2 max-w-[52ch] text-base leading-[1.7] text-muted">Keep the profile useful and choose when Drops should arrive.</p>
       </header>
       <PreferencesForm profile={result.profile} settings={result.settings} />
     </div>

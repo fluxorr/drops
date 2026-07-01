@@ -1,26 +1,29 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-/* eslint-disable @next/next/no-img-element */
 import type { Lesson, LessonSource } from "@/database/schemas";
+
+const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
+
+/* eslint-disable @next/next/no-img-element */
 
 function SourceList({ sources }: { sources: LessonSource[] }) {
   if (sources.length === 0) return null;
 
   return (
-    <div className="mt-16 pt-8 border-t border-rule">
-      <h2 className="mb-4 font-display text-base font-[650] tracking-wide text-muted uppercase">Sources</h2>
-      <ul className="m-0 p-0 list-none flex flex-col gap-2">
+    <div className="mt-12 pt-6 border-t border-rule">
+      <h2 className="mb-3 label-eyebrow">Sources</h2>
+      <ul className="m-0 p-0 list-none flex flex-col gap-1.5">
         {sources.map((source, index) => (
           <li key={index}>
             <a
               href={source.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[0.9375rem] font-semibold text-moss-strong no-underline hover:underline underline-offset-2"
+              className="text-sm font-medium text-ink no-underline hover:underline underline-offset-2"
             >
               {source.title}
             </a>
@@ -35,34 +38,34 @@ function SourceList({ sources }: { sources: LessonSource[] }) {
 }
 
 const markdownComponents = {
-  h1: (props: React.ComponentPropsWithoutRef<"h1">) => <h1 className="mt-12 mb-5 font-display font-[700] text-[1.75rem] leading-[1.2] -tracking-[0.02em]" {...props} />,
-  h2: (props: React.ComponentPropsWithoutRef<"h2">) => <h2 className="mt-10 mb-4 font-display font-[650] text-[1.375rem] leading-[1.2] -tracking-[0.015em]" {...props} />,
-  h3: (props: React.ComponentPropsWithoutRef<"h3">) => <h3 className="mt-8 mb-3 font-display font-[650] text-[1.125rem] leading-[1.2]" {...props} />,
-  p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="mb-5" {...props} />,
-  ul: (props: React.ComponentPropsWithoutRef<"ul">) => <ul className="mb-5 pl-6" {...props} />,
-  ol: (props: React.ComponentPropsWithoutRef<"ol">) => <ol className="mb-5 pl-6" {...props} />,
+  h1: (props: React.ComponentPropsWithoutRef<"h1">) => <h1 className="mt-10 mb-4 font-[450] text-[1.5rem] leading-[1.2] tracking-[-0.02em]" {...props} />,
+  h2: (props: React.ComponentPropsWithoutRef<"h2">) => <h2 className="mt-8 mb-3 font-[450] text-[1.25rem] leading-[1.2] tracking-[-0.015em]" {...props} />,
+  h3: (props: React.ComponentPropsWithoutRef<"h3">) => <h3 className="mt-6 mb-2 font-[500] text-[1.0625rem] leading-[1.2]" {...props} />,
+  p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="mb-4" {...props} />,
+  ul: (props: React.ComponentPropsWithoutRef<"ul">) => <ul className="mb-4 pl-6" {...props} />,
+  ol: (props: React.ComponentPropsWithoutRef<"ol">) => <ol className="mb-4 pl-6" {...props} />,
   li: (props: React.ComponentPropsWithoutRef<"li">) => {
     if (props.className?.includes("task-list-item")) {
-      return <li className="mb-1.5 list-none -ml-6 [&_input]:accent-moss-strong [&_input]:mr-2" {...props} />;
+      return <li className="mb-1.5 list-none -ml-6" {...props} />;
     }
     return <li className="mb-1.5" {...props} />;
   },
   code: (props: React.ComponentPropsWithoutRef<"code">) => {
     const isInline = !props.className;
     return isInline ? (
-      <code className="rounded-md bg-surface px-[5px] py-[2px] text-[0.9375rem] font-semibold text-ink" {...props} />
+      <code className="rounded bg-surface px-[4px] py-[1px] text-[0.9375rem] font-medium text-ink border border-rule" {...props} />
     ) : (
-      <code className="block rounded-xl bg-surface p-5 text-sm leading-[1.65] overflow-x-auto" {...props} />
+      <code className="block rounded-lg bg-surface p-4 text-sm leading-[1.65] overflow-x-auto border border-rule" {...props} />
     );
   },
-  pre: (props: React.ComponentPropsWithoutRef<"pre">) => <pre className="mb-6" {...props} />,
+  pre: (props: React.ComponentPropsWithoutRef<"pre">) => <pre className="mb-5" {...props} />,
   blockquote: (props: React.ComponentPropsWithoutRef<"blockquote">) => (
-    <blockquote className="my-7 ml-0 rounded-xl bg-surface px-5 py-4 text-muted border border-rule" {...props} />
+    <blockquote className="my-6 ml-0 rounded-lg bg-surface px-4 py-3 text-muted border border-rule" {...props} />
   ),
-  a: (props: React.ComponentPropsWithoutRef<"a">) => <a target="_blank" rel="noopener noreferrer" className="text-moss-strong underline underline-offset-2 decoration-1 decoration-moss/30 hover:decoration-moss-strong transition-all duration-150" {...props} />,
-  strong: (props: React.ComponentPropsWithoutRef<"strong">) => <strong className="font-[650]" {...props} />,
-  hr: (props: React.ComponentPropsWithoutRef<"hr">) => <hr className="my-10 border-rule" {...props} />,
-  img: (props: React.ComponentPropsWithoutRef<"img">) => <img className="rounded-xl my-8 w-full" {...props} alt={props.alt ?? ""} />,
+  a: (props: React.ComponentPropsWithoutRef<"a">) => <a target="_blank" rel="noopener noreferrer" className="text-ink underline underline-offset-2 decoration-1 decoration-ink/20 hover:decoration-ink transition-all duration-150" {...props} />,
+  strong: (props: React.ComponentPropsWithoutRef<"strong">) => <strong className="font-[550]" {...props} />,
+  hr: (props: React.ComponentPropsWithoutRef<"hr">) => <hr className="my-8 border-rule" {...props} />,
+  img: (props: React.ComponentPropsWithoutRef<"img">) => <img className="rounded-lg my-6 w-full border border-rule" {...props} alt={props.alt ?? ""} />,
 };
 
 export function LessonReader({ lesson }: { lesson: Lesson }) {
@@ -91,27 +94,27 @@ export function LessonReader({ lesson }: { lesson: Lesson }) {
   }
 
   return (
-    <article aria-labelledby="lesson-title" className="max-w-[720px] mx-auto">
-      <div className="animate-fade-up mb-12 pb-8 border-b border-rule">
-        <p className="text-sm font-semibold tracking-wide text-moss-strong mb-3">
+    <article aria-labelledby="lesson-title" className="max-w-[680px] mx-auto">
+      <div className="animate-fade-up mb-10 pb-6 border-b border-rule">
+        <p className="label-eyebrow mb-2">
           Today&apos;s lesson
         </p>
         <h1
           id="lesson-title"
-          className="font-display text-[clamp(2rem,4.5vw,3.5rem)] font-[700] leading-[1.04] -tracking-[0.025em] text-balance mb-4"
+          className="text-[clamp(1.75rem,4vw,2.75rem)] font-[450] leading-[1.1] tracking-[-0.02em] text-balance mb-3"
         >
           {lesson.title}
         </h1>
-        <p className="max-w-[58ch] text-[1.0625rem] leading-[1.75] text-muted italic">
+        <p className="max-w-[54ch] text-base leading-[1.7] text-muted">
           {lesson.whyThisLesson}
         </p>
-        <div className="mt-4 flex items-center gap-1 text-sm text-muted">
+        <div className="mt-3 flex items-center gap-1 text-sm text-muted">
           <span>{lesson.readMinutes} min read</span>
           {lesson.generatorModel && <><span>&middot;</span><span>{lesson.generatorModel}</span></>}
         </div>
       </div>
 
-      <div className="animate-fade-up text-[1.0625rem] leading-[1.8] max-w-[68ch] [&_input[type=checkbox]]:accent-moss-strong" style={{ animationDelay: "0.1s" }}>
+      <div className="animate-fade-up text-base leading-[1.8] max-w-[68ch]" style={{ animationDelay: "0.06s" }}>
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
           {lesson.contentMarkdown}
         </ReactMarkdown>
@@ -119,17 +122,17 @@ export function LessonReader({ lesson }: { lesson: Lesson }) {
 
       <SourceList sources={lesson.sources ?? []} />
 
-      <div className="animate-fade-up mt-16 flex gap-3 pb-12" style={{ animationDelay: "0.15s" }}>
+      <div className="animate-fade-up mt-12 flex gap-3 pb-10" style={{ animationDelay: "0.1s" }}>
         <button
           type="button"
-          className="group inline-flex min-h-10 items-center justify-center gap-2 rounded-[10px] border-0 bg-moss-strong px-5 py-2.5 text-[0.9375rem] font-semibold leading-[1.25] text-white no-underline cursor-pointer transition-all duration-200 hover:bg-moss-strong/90 hover:shadow-[0_4px_16px_var(--color-shadow)] active:scale-[0.97] disabled:opacity-65 disabled:cursor-not-allowed disabled:hover:shadow-none"
+          className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-accent px-4 text-[0.875rem] font-medium text-white cursor-pointer transition-all duration-150 hover:opacity-85 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={saving || lesson.status !== "unread"}
           onClick={() => markStatus("completed")}
         >
           {isCompleted ? (
             <span className="inline-flex items-center gap-1.5">
-              <svg viewBox="0 0 14 14" className="size-[14px]" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="2,7 6,11 12,3" />
+              <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="2,6 5,9 10,3" />
               </svg>
               Completed
             </span>
@@ -139,7 +142,7 @@ export function LessonReader({ lesson }: { lesson: Lesson }) {
         </button>
         <button
           type="button"
-          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[10px] border border-rule bg-transparent px-5 py-2.5 text-[0.9375rem] font-semibold leading-[1.25] text-ink no-underline cursor-pointer transition-all duration-150 hover:bg-surface active:scale-[0.97] disabled:opacity-65 disabled:cursor-not-allowed"
+          className="inline-flex h-9 items-center justify-center rounded-md border border-rule bg-transparent px-3.5 text-[0.875rem] font-medium text-ink cursor-pointer transition-all duration-150 hover:bg-surface active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={saving || lesson.status !== "unread"}
           onClick={() => markStatus("skipped")}
         >
@@ -150,19 +153,38 @@ export function LessonReader({ lesson }: { lesson: Lesson }) {
   );
 }
 
+function EmptyIllustration() {
+  return (
+    <svg viewBox="0 0 180 110" className="w-44 h-[110px]" fill="none" aria-hidden="true">
+      <rect x="48" y="14" width="84" height="60" rx="4" stroke="var(--color-rule)" strokeWidth="1" fill="var(--color-surface)" />
+      <rect x="36" y="10" width="5" height="68" rx="1.5" stroke="var(--color-rule)" strokeWidth="1" fill="var(--color-surface)" />
+      <path d="M60 30L120 30" stroke="var(--color-rule)" strokeWidth="1" strokeDasharray="3 2" />
+      <path d="M60 44L104 44" stroke="var(--color-rule)" strokeWidth="1" strokeDasharray="3 2" />
+      <path d="M60 58L92 58" stroke="var(--color-rule)" strokeWidth="1" strokeDasharray="3 2" />
+      <path d="M72 14Q86 6 100 14" stroke="var(--color-accent)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <circle cx="42" cy="72" r="2" fill="var(--color-accent)" />
+      <circle cx="140" cy="34" r="2" fill="var(--color-accent)" />
+      <circle cx="134" cy="66" r="1.5" fill="var(--color-rule)" />
+    </svg>
+  );
+}
+
 export function EmptyToday() {
   return (
     <section aria-labelledby="empty-heading" className="animate-fade-up">
-      <p className="mb-1 text-sm font-semibold tracking-wide text-moss-strong">
+      <div className="mb-5">
+        <EmptyIllustration />
+      </div>
+      <p className="label-eyebrow">
         {new Date().toLocaleDateString("en-IN", { weekday: "long", timeZone: "Asia/Kolkata" })}
       </p>
       <h1
         id="empty-heading"
-        className="font-display text-[clamp(2rem,4.5vw,3.5rem)] font-[700] leading-[1.04] -tracking-[0.025em] text-balance mt-3"
+        className="text-[clamp(1.75rem,4vw,2.75rem)] font-[450] leading-[1.1] tracking-[-0.02em] text-balance mt-2"
       >
         All caught up.
       </h1>
-      <p className="mt-5 max-w-[52ch] text-[1.0625rem] leading-[1.75] text-muted">
+      <p className="mt-4 max-w-[52ch] text-base leading-[1.7] text-muted">
         You have no unread lessons. A new one will arrive at your scheduled delivery time.
       </p>
     </section>

@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "@clerk/nextjs": "latest",
-    "@google/genai": "latest",
     "@libsql/client": "latest",
     "clsx": "latest",
     "date-fns": "latest",
@@ -35,7 +34,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",
-    "@types/jsdom": "^28.0.3",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
@@ -44,7 +42,6 @@
     "drizzle-kit": "latest",
     "eslint": "^9.39.0",
     "eslint-config-next": "latest",
-    "jsdom": "latest",
     "tailwindcss": "latest",
     "typescript": "latest",
     "vitest": "latest"

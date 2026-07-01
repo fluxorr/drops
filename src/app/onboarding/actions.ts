@@ -5,6 +5,7 @@ import type { Route } from "next";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { expandInterest } from "@/ai/subtopics";
 import { normalizeInterestName } from "@/database/repositories/interests";
 import { createProfile } from "@/database/repositories/profile";
 
@@ -44,6 +45,30 @@ export async function completeOnboarding(
   }
 
   try {
+    const interestEntries = await Promise.all(
+      parsed.data.interests.map(async (name) => {
+        const entry: {
+          name: string;
+          normalizedName: string;
+          weight: number;
+          subtopics?: string[] | null;
+        } = {
+          name,
+          normalizedName: normalizeInterestName(name),
+          weight: 70,
+        };
+
+        try {
+          entry.subtopics = await expandInterest(name);
+          console.log(`[onboarding] Expanded "${name}" → ${entry.subtopics.length} sub-topics`);
+        } catch {
+          console.warn(`[onboarding] Could not expand "${name}", saving as-is`);
+        }
+
+        return entry;
+      }),
+    );
+
     await createProfile(
       {
         userId,
@@ -51,11 +76,7 @@ export async function completeOnboarding(
         learningGoal: parsed.data.learningGoal,
         background: parsed.data.background,
       },
-      parsed.data.interests.map((name) => ({
-        name,
-        normalizedName: normalizeInterestName(name),
-        weight: 70,
-      })),
+      interestEntries,
     );
   } catch (error) {
     console.error("Unable to create learning profile", error);

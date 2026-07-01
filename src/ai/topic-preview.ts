@@ -1,6 +1,7 @@
 import { freeWebSearch } from "./web-search";
 
 export type TopicPreview = {
+  subTopics: string[];
   resources: Array<{ title: string; url: string; description: string }>;
   prerequisites: string[];
   whyItMatters: string;
@@ -34,6 +35,7 @@ async function callOpenRouter(
       ],
       temperature: 0.5,
       top_p: 0.9,
+      max_tokens: 2048,
     }),
   });
 
@@ -44,6 +46,47 @@ async function callOpenRouter(
 
   const data = await res.json();
   return data.choices?.[0]?.message?.content ?? "";
+}
+
+function repairTruncatedJson(s: string): string {
+  let fixed = s.trim().replace(/,\s*$/, "");
+  const hasQuote = (fixed.match(/"/g) || []).length;
+  if (hasQuote % 2 !== 0) fixed += '"';
+  const openCurlies = (fixed.match(/\{/g) || []).length;
+  const closeCurlies = (fixed.match(/\}/g) || []).length;
+  const openBrackets = (fixed.match(/\[/g) || []).length;
+  const closeBrackets = (fixed.match(/\]/g) || []).length;
+  fixed += "}".repeat(Math.max(0, openCurlies - closeCurlies));
+  fixed += "]".repeat(Math.max(0, openBrackets - closeBrackets));
+  return fixed;
+}
+
+function parsePreview(text: string): TopicPreview {
+  const cleaned = text
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch {
+    const repaired = repairTruncatedJson(cleaned);
+    try {
+      parsed = JSON.parse(repaired);
+    } catch {
+      console.error("[topic-preview] Failed to parse JSON after repair");
+      parsed = {};
+    }
+  }
+
+  return {
+    subTopics: Array.isArray(parsed.subTopics) ? parsed.subTopics : [],
+    resources: Array.isArray(parsed.resources) ? parsed.resources : [],
+    prerequisites: Array.isArray(parsed.prerequisites) ? parsed.prerequisites : [],
+    whyItMatters: typeof parsed.whyItMatters === "string" ? parsed.whyItMatters : "",
+    difficultyAssessment: typeof parsed.difficultyAssessment === "string" ? parsed.difficultyAssessment : "",
+  };
 }
 
 export async function previewTopic(
@@ -59,29 +102,36 @@ export async function previewTopic(
       ? searchResults.results.map((r, i) => `${i + 1}. ${r.title}\n   URL: ${r.url}\n   ${r.description}`).join("\n\n")
       : "No search results found.";
 
-    const systemPrompt = "You are a helpful research assistant helping a learner decide what to study next. Respond only with valid JSON. Never include markdown code fences or text outside the JSON object.";
+    const systemPrompt = "You are a senior engineer and technical educator. Analyze topics with depth and precision. Respond only with valid JSON. Never include markdown code fences or text outside the JSON object.";
 
-    const userPrompt = `## Topic to investigate
+    const userPrompt = `## Topic
 ${topicName}
 
-## Learner context
+## Learner
 - Goal: ${learnerGoal}
 - Background: ${learnerBackground}
 
-## Web search results for "${topicName}"
+## Web search results for context
 ${searchContext}
 
-Based on the search results above, provide a detailed preview of this topic. Respond with valid JSON only using this exact schema:
+This topic is one sub-topic within a broader domain a learner is exploring. Provide a concise, actionable preview.
+
+Respond with valid JSON only using this exact schema:
 {
+  "subTopics": ["2-3 specific, narrower sub-topics within this area that would make good follow-up lessons"],
   "resources": [
-    { "title": "string (article/blog title)", "url": "string (real URL from search results)", "description": "string (1 sentence summary)" }
+    { "title": "string", "url": "string (real URL from search results)", "description": "string (1 sentence)" }
   ],
-  "prerequisites": ["string (concept or skill to know first)"],
-  "whyItMatters": "string (2-3 sentences on why this topic is worth learning)",
-  "difficultyAssessment": "string (1 sentence on difficulty relative to the learner's background)"
+  "prerequisites": ["1-2 concepts or skills the learner should understand first"],
+  "whyItMatters": "string (1-2 sentences on practical relevance, what this enables the learner to do, or why engineers invest time here)",
+  "difficultyAssessment": "string (1 sentence rating difficulty relative to the learner's background and what makes it challenging)"
 }
 
-Include 2-3 resources with real URLs from the search results above. Keep descriptions concise.`;
+Requirements:
+- subTopics must be concrete, well-known sub-areas (not fabrications)
+- resources should be real, high-quality links from the search results above
+- whyItMatters should be specific and practical, not generic praise
+- difficultyAssessment should reference specific aspects (e.g. "requires understanding of x")`;
 
     console.log(`[topic-preview] Calling OpenRouter for topic: "${topicName}"`);
     const text = await callOpenRouter(systemPrompt, userPrompt);
@@ -91,13 +141,8 @@ Include 2-3 resources with real URLs from the search results above. Keep descrip
       return null;
     }
 
-    const cleaned = text
-      .replace(/^```(?:json)?\s*/i, "")
-      .replace(/\s*```$/i, "")
-      .trim();
-
     console.log(`[topic-preview] Raw response: ${text.slice(0, 200)}`);
-    return JSON.parse(cleaned);
+    return parsePreview(text);
   } catch (error) {
     console.error(`[topic-preview] Error generating preview for "${topicName}":`, error);
     return null;

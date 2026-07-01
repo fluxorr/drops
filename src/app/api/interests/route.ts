@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { expandInterest } from "@/ai/subtopics";
 import { listInterests, saveInterest } from "@/database/repositories/interests";
 import { requireApiUser, serverError, unauthorized, validationError } from "@/lib/api";
 import { interestInputSchema } from "@/lib/validation";
@@ -23,8 +24,25 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) return validationError(parsed.error);
 
   try {
-    const interest = await saveInterest(userId, parsed.data);
-    return NextResponse.json({ interest }, { status: 201 });
+    const { name, weight, pinned } = parsed.data;
+
+    let subtopics: string[] | undefined;
+
+    try {
+      subtopics = await expandInterest(name);
+      console.log(`[interests] Expanded "${name}" into ${subtopics.length} sub-topics: ${subtopics.join(", ")}`);
+    } catch (e) {
+      console.warn(`[interests] Failed to expand "${name}", saving as-is:`, e);
+    }
+
+    const interest = await saveInterest(userId, {
+      name,
+      weight: weight ?? 70,
+      pinned: pinned ?? false,
+      subtopics,
+    });
+
+    return NextResponse.json({ interest, subtopics }, { status: 201 });
   } catch (error) {
     return serverError(error);
   }

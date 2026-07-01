@@ -34,7 +34,7 @@ export async function getProfileWithSettings(userId: string, database?: Database
 
 export async function createProfile(
   setup: ProfileSetup,
-  initialInterests: Array<{ name: string; normalizedName: string; weight: number }> = [],
+  initialInterests: Array<{ name: string; normalizedName: string; weight: number; subtopics?: string[] | null }> = [],
   database?: Database | null,
 ) {
   const db = database ?? getDatabase();
@@ -68,7 +68,7 @@ export async function createProfile(
     if (initialInterests.length > 0) {
       await transaction
         .insert(interests)
-        .values(initialInterests.map((interest) => ({ ...interest, userId: setup.userId })))
+        .values(initialInterests.map((interest) => ({ ...interest, userId: setup.userId, subtopics: interest.subtopics ?? null })))
         .onConflictDoNothing({ target: [interests.userId, interests.normalizedName] });
     }
 
