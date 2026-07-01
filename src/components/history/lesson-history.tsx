@@ -86,7 +86,7 @@ export function LessonHistory({ initialLessons }: { initialLessons: Lesson[] }) 
           <input
             id="history-search-input"
             type="search"
-            placeholder="Search lessons\u2026"
+            placeholder="Search lessons..."
             value={filters.query}
             onChange={(e) => updateFilter("query", e.target.value)}
             className="input-base"

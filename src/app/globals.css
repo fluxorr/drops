@@ -196,6 +196,160 @@
   --color-green-val: oklch(0.5 0.14 145);
 }
 
+/* ── Miami ── Neon pink/blue retro */
+[data-theme="miami"] {
+  --color-canvas-val: oklch(0.12 0.02 300);
+  --color-surface-val: oklch(0.16 0.025 300);
+  --color-ink-val: oklch(0.92 0.01 30);
+  --color-muted-val: oklch(0.5 0.02 300);
+  --color-rule-val: oklch(0.2 0.02 300);
+  --color-accent-val: oklch(0.7 0.25 340);
+  --color-accent-faint-val: oklch(0.7 0.25 340 / 0.15);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.6 0.22 30);
+  --color-green-val: oklch(0.55 0.16 150);
+}
+
+/* ── Nebula ── Deep purple/blue space */
+[data-theme="nebula"] {
+  --color-canvas-val: oklch(0.08 0.025 270);
+  --color-surface-val: oklch(0.12 0.03 270);
+  --color-ink-val: oklch(0.9 0.02 280);
+  --color-muted-val: oklch(0.45 0.02 270);
+  --color-rule-val: oklch(0.16 0.025 270);
+  --color-accent-val: oklch(0.6 0.2 270);
+  --color-accent-faint-val: oklch(0.6 0.2 270 / 0.15);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.55 0.18 30);
+  --color-green-val: oklch(0.5 0.14 145);
+}
+
+/* ── Matcha ── Soft green tea */
+[data-theme="matcha"] {
+  --color-canvas-val: oklch(0.95 0.015 120);
+  --color-surface-val: oklch(0.9 0.012 120);
+  --color-ink-val: oklch(0.15 0.02 130);
+  --color-muted-val: oklch(0.45 0.015 120);
+  --color-rule-val: oklch(0.85 0.01 120);
+  --color-accent-val: oklch(0.55 0.14 145);
+  --color-accent-faint-val: oklch(0.55 0.14 145 / 0.12);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.5 0.16 30);
+  --color-green-val: oklch(0.5 0.14 145);
+}
+
+/* ── Cherry ── Dark red/cherry blossom */
+[data-theme="cherry"] {
+  --color-canvas-val: oklch(0.1 0.02 20);
+  --color-surface-val: oklch(0.14 0.025 20);
+  --color-ink-val: oklch(0.9 0.02 30);
+  --color-muted-val: oklch(0.5 0.02 20);
+  --color-rule-val: oklch(0.18 0.02 20);
+  --color-accent-val: oklch(0.55 0.22 10);
+  --color-accent-faint-val: oklch(0.55 0.22 10 / 0.15);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.55 0.2 30);
+  --color-green-val: oklch(0.5 0.14 145);
+}
+
+/* ── Midnight ── Very dark blue */
+[data-theme="midnight"] {
+  --color-canvas-val: oklch(0.06 0.015 260);
+  --color-surface-val: oklch(0.1 0.02 260);
+  --color-ink-val: oklch(0.88 0.015 250);
+  --color-muted-val: oklch(0.42 0.015 260);
+  --color-rule-val: oklch(0.14 0.015 260);
+  --color-accent-val: oklch(0.5 0.15 260);
+  --color-accent-faint-val: oklch(0.5 0.15 260 / 0.15);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.5 0.18 30);
+  --color-green-val: oklch(0.48 0.14 150);
+}
+
+/* ── Olivia ── Light warm with paprika */
+[data-theme="olivia"] {
+  --color-canvas-val: oklch(0.96 0.01 60);
+  --color-surface-val: oklch(0.92 0.008 60);
+  --color-ink-val: oklch(0.15 0.02 40);
+  --color-muted-val: oklch(0.45 0.01 45);
+  --color-rule-val: oklch(0.86 0.008 60);
+  --color-accent-val: oklch(0.6 0.2 25);
+  --color-accent-faint-val: oklch(0.6 0.2 25 / 0.12);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.52 0.18 30);
+  --color-green-val: oklch(0.48 0.14 145);
+}
+
+/* ── Laser ── Dark neon cyan */
+[data-theme="laser"] {
+  --color-canvas-val: oklch(0.08 0.02 240);
+  --color-surface-val: oklch(0.12 0.025 240);
+  --color-ink-val: oklch(0.92 0.02 200);
+  --color-muted-val: oklch(0.45 0.02 240);
+  --color-rule-val: oklch(0.16 0.02 240);
+  --color-accent-val: oklch(0.65 0.2 200);
+  --color-accent-faint-val: oklch(0.65 0.2 200 / 0.15);
+  --color-accent-fg-val: oklch(0.08 0.02 240);
+  --color-signal-val: oklch(0.55 0.18 30);
+  --color-green-val: oklch(0.52 0.14 150);
+}
+
+/* ── Striker ── Dark high contrast amber */
+[data-theme="striker"] {
+  --color-canvas-val: oklch(0.1 0.01 60);
+  --color-surface-val: oklch(0.14 0.015 60);
+  --color-ink-val: oklch(0.9 0.02 70);
+  --color-muted-val: oklch(0.48 0.015 60);
+  --color-rule-val: oklch(0.18 0.012 60);
+  --color-accent-val: oklch(0.65 0.22 55);
+  --color-accent-faint-val: oklch(0.65 0.22 55 / 0.15);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.55 0.2 30);
+  --color-green-val: oklch(0.52 0.14 145);
+}
+
+/* ── Sky ── Light airy blue */
+[data-theme="sky"] {
+  --color-canvas-val: oklch(0.97 0.01 240);
+  --color-surface-val: oklch(0.93 0.008 240);
+  --color-ink-val: oklch(0.12 0.02 250);
+  --color-muted-val: oklch(0.45 0.015 240);
+  --color-rule-val: oklch(0.87 0.008 240);
+  --color-accent-val: oklch(0.55 0.14 220);
+  --color-accent-faint-val: oklch(0.55 0.14 220 / 0.12);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.5 0.16 30);
+  --color-green-val: oklch(0.47 0.14 145);
+}
+
+/* ── Terra ── Earthy terracotta */
+[data-theme="terra"] {
+  --color-canvas-val: oklch(0.14 0.02 50);
+  --color-surface-val: oklch(0.18 0.025 50);
+  --color-ink-val: oklch(0.9 0.02 60);
+  --color-muted-val: oklch(0.52 0.015 50);
+  --color-rule-val: oklch(0.22 0.02 50);
+  --color-accent-val: oklch(0.55 0.18 50);
+  --color-accent-faint-val: oklch(0.55 0.18 50 / 0.15);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.55 0.2 30);
+  --color-green-val: oklch(0.5 0.14 145);
+}
+
+/* ── Aubergine ── Deep purple eggplant */
+[data-theme="aubergine"] {
+  --color-canvas-val: oklch(0.1 0.025 300);
+  --color-surface-val: oklch(0.14 0.03 300);
+  --color-ink-val: oklch(0.9 0.02 310);
+  --color-muted-val: oklch(0.48 0.025 300);
+  --color-rule-val: oklch(0.18 0.025 300);
+  --color-accent-val: oklch(0.55 0.18 300);
+  --color-accent-faint-val: oklch(0.55 0.18 300 / 0.15);
+  --color-accent-fg-val: oklch(0.98 0 0);
+  --color-signal-val: oklch(0.52 0.18 30);
+  --color-green-val: oklch(0.48 0.14 145);
+}
+
 /* ── Base styles ── */
 * {
   box-sizing: border-box;

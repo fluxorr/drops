@@ -15,6 +15,17 @@ const themes = [
   { id: "tokyo-night", label: "Tokyo Night" },
   { id: "everforest", label: "Everforest" },
   { id: "catppuccin", label: "Catppuccin" },
+  { id: "miami", label: "Miami" },
+  { id: "nebula", label: "Nebula" },
+  { id: "matcha", label: "Matcha" },
+  { id: "cherry", label: "Cherry" },
+  { id: "midnight", label: "Midnight" },
+  { id: "olivia", label: "Olivia" },
+  { id: "laser", label: "Laser" },
+  { id: "striker", label: "Striker" },
+  { id: "sky", label: "Sky" },
+  { id: "terra", label: "Terra" },
+  { id: "aubergine", label: "Aubergine" },
 ];
 
 function getSnapshot() {
@@ -41,6 +52,17 @@ const themeAccentMap: Record<string, string> = {
   "tokyo-night": "oklch(0.65 0.18 250)",
   everforest: "oklch(0.58 0.14 145)",
   catppuccin: "oklch(0.62 0.15 350)",
+  miami: "oklch(0.7 0.25 340)",
+  nebula: "oklch(0.6 0.2 270)",
+  matcha: "oklch(0.55 0.14 145)",
+  cherry: "oklch(0.55 0.22 10)",
+  midnight: "oklch(0.5 0.15 260)",
+  olivia: "oklch(0.6 0.2 25)",
+  laser: "oklch(0.65 0.2 200)",
+  striker: "oklch(0.65 0.22 55)",
+  sky: "oklch(0.55 0.14 220)",
+  terra: "oklch(0.55 0.18 50)",
+  aubergine: "oklch(0.55 0.18 300)",
 };
 
 export function ThemeSwitcher() {

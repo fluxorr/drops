@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SpotlightCard } from "@/components/aceternity/spotlight-card";
-import { TopicPreviewModal } from "@/components/today/topic-preview-modal";
+import { InterestPreviewModal } from "@/components/interests/interest-preview-modal";
 import type { Interest } from "@/database/schemas";
 
 type InterestsManagerProps = {
@@ -21,7 +21,7 @@ export function InterestsManager({ initialInterests }: InterestsManagerProps) {
   const [saving, setSaving] = useState(false);
   const [resettingId, setResettingId] = useState<string | null>(null);
   const [error, setError] = useState("");
-  const [previewTopic, setPreviewTopic] = useState<string | null>(null);
+  const [previewInterest, setPreviewInterest] = useState<Interest | null>(null);
 
   async function addInterest() {
     if (!name.trim() || saving) return;
@@ -92,7 +92,7 @@ export function InterestsManager({ initialInterests }: InterestsManagerProps) {
             <Input
               id="interest-name"
               type="text"
-              placeholder="e.g. Rust, Distributed Systems\u2026"
+              placeholder="e.g. Rust, Distributed Systems..."
               value={name}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(e) => {
@@ -160,11 +160,11 @@ export function InterestsManager({ initialInterests }: InterestsManagerProps) {
                 <div
                   className="animate-fade-up group flex items-center justify-between gap-3 rounded-xl border border-rule p-3.5 transition-all duration-200 hover:border-ink/30 cursor-pointer"
                   style={{ animationDelay: `${i * 0.03}s` }}
-                  onClick={() => setPreviewTopic(interest.name)}
+                  onClick={() => setPreviewInterest(interest)}
                   role="button"
                   tabIndex={0}
                   aria-label={`Preview ${interest.name}`}
-                  onKeyDown={(e) => { if (e.key === "Enter") setPreviewTopic(interest.name); }}
+                  onKeyDown={(e) => { if (e.key === "Enter") setPreviewInterest(interest); }}
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1">
@@ -222,11 +222,16 @@ export function InterestsManager({ initialInterests }: InterestsManagerProps) {
         </div>
       )}
 
-      {previewTopic && (
-        <TopicPreviewModal
-          topicName={previewTopic}
-          open={!!previewTopic}
-          onClose={() => setPreviewTopic(null)}
+      {previewInterest && (
+        <InterestPreviewModal
+          interest={{
+            name: previewInterest.name,
+            weight: previewInterest.weight,
+            pinned: previewInterest.pinned,
+            subtopics: (previewInterest as Interest & { subtopics?: string[] }).subtopics,
+          }}
+          open={!!previewInterest}
+          onClose={() => setPreviewInterest(null)}
         />
       )}
     </section>

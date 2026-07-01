@@ -23,6 +23,17 @@ export function ThemeProvider({
         "tokyo-night",
         "everforest",
         "catppuccin",
+        "miami",
+        "nebula",
+        "matcha",
+        "cherry",
+        "midnight",
+        "olivia",
+        "laser",
+        "striker",
+        "sky",
+        "terra",
+        "aubergine",
       ]}
       {...props}
     >
