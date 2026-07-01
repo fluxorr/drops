@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpenText, History, Lightbulb, Settings } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+
 const navItems = [
   { href: "/today" as const, label: "Today", icon: BookOpenText },
   { href: "/history" as const, label: "History", icon: History },
@@ -22,11 +24,12 @@ export function AppNav() {
           <Link
             key={href}
             href={href}
-            className={`inline-flex h-8 items-center gap-[5px] rounded-md px-2.5 text-[0.8125rem] font-medium no-underline transition-all duration-150 ${
+            className={cn(
+              "inline-flex h-8 items-center gap-[5px] rounded-md px-2.5 text-[0.8125rem] font-medium no-underline transition-all duration-150",
               isActive
                 ? "bg-accent-faint text-accent"
-                : "text-muted hover:bg-surface hover:text-ink"
-            }`}
+                : "text-muted hover:bg-surface hover:text-ink",
+            )}
           >
             <Icon aria-hidden="true" size={14} strokeWidth={isActive ? 2 : 1.6} />
             <span>{label}</span>

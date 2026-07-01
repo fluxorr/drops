@@ -1,6 +1,9 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { Bell, BellRing } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 export function PushSubscriptionManager() {
   const [saving, setSaving] = useState(false);
@@ -71,23 +74,28 @@ export function PushSubscriptionManager() {
   }
 
   if (permission === "granted") {
-    return <p className="text-sm font-medium text-green">&check; Notifications enabled</p>;
+    return (
+      <p className="inline-flex items-center gap-1.5 text-sm font-medium text-green">
+        <BellRing className="size-3.5" />
+        Notifications enabled
+      </p>
+    );
   }
 
   return (
-    <button
-      type="button"
-      className="inline-flex h-9 items-center justify-center rounded-md border border-rule bg-transparent px-3.5 text-[0.8125rem] font-medium text-ink cursor-pointer transition-all duration-150 hover:bg-surface active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
-      onClick={subscribe}
-      disabled={saving}
-    >
+    <Button variant="outline" onClick={subscribe} disabled={saving}>
       {saving ? (
         <span className="inline-flex items-center gap-2">
-          <span className="size-3.5 rounded-full border-[1.5px] border-muted/30 border-t-muted animate-spin" />
+          <span className="size-3.5 rounded-full border-2 border-ink/30 border-t-ink animate-spin" />
           Enabling
         </span>
-      ) : "Enable push notifications"}
-    </button>
+      ) : (
+        <span className="inline-flex items-center gap-1.5">
+          <Bell className="size-3.5" />
+          Enable push notifications
+        </span>
+      )}
+    </Button>
   );
 }
 

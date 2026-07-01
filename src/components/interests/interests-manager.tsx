@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { Plus, RotateCcw, Trash2 } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { SpotlightCard } from "@/components/aceternity/spotlight-card";
+import { TopicPreviewModal } from "@/components/today/topic-preview-modal";
 import type { Interest } from "@/database/schemas";
 
 type InterestsManagerProps = {
@@ -15,6 +21,7 @@ export function InterestsManager({ initialInterests }: InterestsManagerProps) {
   const [saving, setSaving] = useState(false);
   const [resettingId, setResettingId] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [previewTopic, setPreviewTopic] = useState<string | null>(null);
 
   async function addInterest() {
     if (!name.trim() || saving) return;
@@ -81,8 +88,8 @@ export function InterestsManager({ initialInterests }: InterestsManagerProps) {
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-end gap-3">
           <div className="flex flex-col gap-1.5 min-w-0 flex-1">
-            <label htmlFor="interest-name" className="text-sm font-medium text-muted">Topic</label>
-            <input
+            <Label htmlFor="interest-name">Topic</Label>
+            <Input
               id="interest-name"
               type="text"
               placeholder="e.g. Rust, Distributed Systems\u2026"
@@ -91,13 +98,12 @@ export function InterestsManager({ initialInterests }: InterestsManagerProps) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") addInterest();
               }}
-              className="input-base"
             />
           </div>
           <div className="flex flex-col gap-1.5 w-[140px]">
-            <label htmlFor="interest-weight" className="text-sm font-medium text-muted">
-              Weight <span className="text-muted">({weight})</span>
-            </label>
+            <Label htmlFor="interest-weight">
+              Weight <span className="text-muted font-normal">({weight})</span>
+            </Label>
             <input
               id="interest-weight"
               type="range"
@@ -106,17 +112,22 @@ export function InterestsManager({ initialInterests }: InterestsManagerProps) {
               step={5}
               value={weight}
               onChange={(e) => setWeight(Number(e.target.value))}
-              className="accent-accent"
+              className="h-2 w-full cursor-pointer appearance-none rounded-full bg-rule accent-accent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:duration-150 [&::-webkit-slider-thumb]:hover:scale-110"
             />
           </div>
-          <button
-            type="button"
-            className="inline-flex h-9 items-center justify-center rounded-md bg-accent px-3.5 text-[0.8125rem] font-medium text-white cursor-pointer transition-all duration-150 hover:opacity-85 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={saving || !name.trim()}
-            onClick={addInterest}
-          >
-            {saving ? "Adding\u2026" : "Add"}
-          </button>
+          <Button onClick={addInterest} disabled={saving || !name.trim()}>
+            {saving ? (
+              <span className="inline-flex items-center gap-1.5">
+                <span className="size-3 rounded-full border-2 border-accent-fg/30 border-t-accent-fg animate-spin" />
+                Adding
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1">
+                <Plus className="size-3.5" />
+                Add
+              </span>
+            )}
+          </Button>
         </div>
         {error && <p className="text-sm text-signal">{error}</p>}
       </div>
@@ -145,50 +156,78 @@ export function InterestsManager({ initialInterests }: InterestsManagerProps) {
           {interests.map((interest, i) => {
             const subs = (interest as Interest & { subtopics?: string[] }).subtopics;
             return (
-              <div key={interest.id} className="animate-fade-up flex items-center justify-between gap-3 rounded-xl border border-rule p-3 transition-all duration-150 hover:border-ink/20" style={{ animationDelay: `${i * 0.03}s` }}>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-sm font-medium">{interest.name}</span>
-                    {interest.pinned && <span className="rounded border border-rule px-1.5 py-0.5 text-[0.625rem] font-medium text-muted">Pinned</span>}
-                    {resettingId === interest.id && <span className="rounded border border-rule px-1.5 py-0.5 text-[0.625rem] text-muted">Resetting\u2026</span>}
-                  </div>
-                  {subs && subs.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-2">
-                      {subs.map((s, j) => (
-                        <span key={j} className="rounded border border-rule bg-surface px-1.5 py-0.5 text-[0.625rem] text-muted">{s}</span>
-                      ))}
+              <SpotlightCard key={interest.id}>
+                <div
+                  className="animate-fade-up group flex items-center justify-between gap-3 rounded-xl border border-rule p-3.5 transition-all duration-200 hover:border-ink/30 cursor-pointer"
+                  style={{ animationDelay: `${i * 0.03}s` }}
+                  onClick={() => setPreviewTopic(interest.name)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Preview ${interest.name}`}
+                  onKeyDown={(e) => { if (e.key === "Enter") setPreviewTopic(interest.name); }}
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-medium text-ink">{interest.name}</span>
+                      {interest.pinned && (
+                        <span className="rounded border border-rule px-1.5 py-0.5 text-[0.625rem] font-medium text-muted">Pinned</span>
+                      )}
+                      {resettingId === interest.id && (
+                        <span className="inline-flex items-center gap-1 rounded border border-rule px-1.5 py-0.5 text-[0.625rem] text-muted">
+                          <span className="size-2 rounded-full border border-muted/50 border-t-muted animate-spin" />
+                          Resetting
+                        </span>
+                      )}
                     </div>
-                  )}
-                  <div className="flex items-center gap-2">
-                    <span className="h-1 flex-1 rounded-full bg-rule overflow-hidden">
-                      <span className="block h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${interest.weight}%` }} />
-                    </span>
-                    <span className="text-xs text-muted">{interest.weight}%</span>
+                    {subs && subs.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        {subs.map((s, j) => (
+                          <span key={j} className="rounded border border-rule bg-surface px-1.5 py-0.5 text-[0.625rem] text-muted">{s}</span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2">
+                      <span className="h-1 flex-1 rounded-full bg-rule overflow-hidden">
+                        <span className="block h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${interest.weight}%` }} />
+                      </span>
+                      <span className="text-xs text-muted tabular-nums">{interest.weight}%</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity duration-150" onClick={(e) => e.stopPropagation()}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => resetInterest(interest.id)}
+                      disabled={resettingId === interest.id}
+                      aria-label={`Reset ${interest.name} topics`}
+                    >
+                      <RotateCcw className="size-3" />
+                      Reset
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeInterest(interest.id)}
+                      aria-label={`Remove ${interest.name}`}
+                      className="text-muted hover:text-signal"
+                    >
+                      <Trash2 className="size-3" />
+                      Remove
+                    </Button>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <button
-                    type="button"
-                    className="inline-flex h-7 items-center rounded-md border border-rule bg-transparent px-2 text-xs font-medium text-muted transition-all duration-150 hover:text-ink hover:border-ink/40"
-                    onClick={() => resetInterest(interest.id)}
-                    disabled={resettingId === interest.id}
-                    aria-label={`Reset ${interest.name} topics`}
-                  >
-                    {resettingId === interest.id ? "..." : "Reset"}
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex h-7 items-center rounded-md border border-rule bg-transparent px-2 text-xs font-medium text-muted transition-all duration-150 hover:text-ink hover:border-ink/40"
-                    onClick={() => removeInterest(interest.id)}
-                    aria-label={`Remove ${interest.name}`}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
+              </SpotlightCard>
             );
           })}
         </div>
+      )}
+
+      {previewTopic && (
+        <TopicPreviewModal
+          topicName={previewTopic}
+          open={!!previewTopic}
+          onClose={() => setPreviewTopic(null)}
+        />
       )}
     </section>
   );

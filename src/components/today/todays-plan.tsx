@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { TopicPreviewModal } from "./topic-preview-modal";
 
 type Topic = {
@@ -160,17 +161,17 @@ export function TodaysPlan({ initialPlan, profileName }: { initialPlan: PlanStat
                   {checked.length}/{candidates.length}
                 </span>
               </div>
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={replaceAll}
                 disabled={resetting.size > 0}
-                className="text-sm font-medium rounded-md px-2.5 py-1 border border-rule bg-transparent text-muted transition-all duration-150 hover:text-ink hover:border-ink/40 disabled:opacity-40 disabled:cursor-wait"
               >
                 <span className="inline-flex items-center gap-1.5">
                   {resetting.size > 0 && <span className="size-3 rounded-full border-[1.5px] border-muted/30 border-t-muted animate-spin" />}
                   {resetting.size > 0 ? "Replacing" : "Replace all"}
                 </span>
-              </button>
+              </Button>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -239,18 +240,19 @@ export function TodaysPlan({ initialPlan, profileName }: { initialPlan: PlanStat
                           </p>
                         </button>
 
-                        <button
-                          type="button"
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => replaceOne(topic.normalizedName)}
                           disabled={resetting.size > 0}
                           aria-label={`Replace ${topic.name}`}
-                          className="shrink-0 self-center h-7 px-2 text-xs font-medium rounded-md border border-rule bg-transparent transition-all duration-150 disabled:cursor-wait text-muted hover:text-ink hover:border-ink/40 disabled:opacity-40"
+                          className="shrink-0 h-7"
                         >
                           <span className="inline-flex items-center gap-1">
                             {isResetting && <span className="size-2.5 rounded-full border-[1.5px] border-muted/30 border-t-muted animate-spin" />}
                             {isResetting ? "..." : "Replace"}
                           </span>
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   );

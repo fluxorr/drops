@@ -1,6 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer } from "react";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export type TopicPreviewData = {
   subTopics: string[];
@@ -46,17 +55,6 @@ export function TopicPreviewModal({
     loading: false,
     error: null,
   });
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const el = dialogRef.current;
-    if (!el) return;
-    if (open && !el.open) {
-      el.showModal();
-    } else if (!open && el.open) {
-      el.close();
-    }
-  }, [open]);
 
   useEffect(() => {
     if (!open || !topicName) return;
@@ -82,34 +80,13 @@ export function TopicPreviewModal({
     return () => abort.abort();
   }, [open, topicName]);
 
-  const handleBackdrop = useCallback((e: React.MouseEvent<HTMLDialogElement>) => {
-    if (e.target === dialogRef.current) onClose();
-  }, [onClose]);
-
   return (
-    <dialog
-      ref={dialogRef}
-      onClose={onClose}
-      onClick={handleBackdrop}
-      className="fixed inset-0 z-50 m-0 h-full w-full max-w-none bg-transparent p-0 backdrop:bg-black/20 backdrop:backdrop-blur-sm open:flex open:items-center open:justify-center"
-    >
-      <div className="mx-auto w-[min(100%-32px,520px)] max-h-[85vh] overflow-y-auto rounded-xl border border-rule bg-canvas p-5 animate-scale-in">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-medium leading-[1.2]">
-            {topicName}
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="grid size-7 place-items-center rounded-md border-0 bg-transparent text-muted cursor-pointer hover:bg-surface hover:text-ink transition-all duration-150"
-          >
-            <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              <line x1="2" y1="2" x2="10" y2="10" />
-              <line x1="10" y1="2" x2="2" y2="10" />
-            </svg>
-          </button>
-        </div>
+    <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-h-[85vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{topicName}</DialogTitle>
+          <DialogDescription>Topic preview and resources</DialogDescription>
+        </DialogHeader>
 
         {loading && (
           <div className="flex flex-col gap-4 py-3" aria-hidden="true">
@@ -206,15 +183,11 @@ export function TopicPreviewModal({
         )}
 
         <div className="mt-5 flex justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex h-8 items-center justify-center rounded-md border border-rule bg-transparent px-3 text-[0.8125rem] font-medium text-ink cursor-pointer transition-all duration-150 hover:bg-surface"
-          >
+          <Button variant="outline" onClick={onClose}>
             Close
-          </button>
+          </Button>
         </div>
-      </div>
-    </dialog>
+      </DialogContent>
+    </Dialog>
   );
 }

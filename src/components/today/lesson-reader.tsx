@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import remarkGfm from "remark-gfm";
 
+import { Button } from "@/components/ui/button";
 import type { Lesson, LessonSource } from "@/database/schemas";
 
 const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
@@ -123,9 +124,7 @@ export function LessonReader({ lesson }: { lesson: Lesson }) {
       <SourceList sources={lesson.sources ?? []} />
 
       <div className="animate-fade-up mt-12 flex gap-3 pb-10" style={{ animationDelay: "0.1s" }}>
-        <button
-          type="button"
-          className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-accent px-4 text-[0.875rem] font-medium text-white cursor-pointer transition-all duration-150 hover:opacity-85 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
+        <Button
           disabled={saving || lesson.status !== "unread"}
           onClick={() => markStatus("completed")}
         >
@@ -139,15 +138,14 @@ export function LessonReader({ lesson }: { lesson: Lesson }) {
           ) : (
             "Mark as done"
           )}
-        </button>
-        <button
-          type="button"
-          className="inline-flex h-9 items-center justify-center rounded-md border border-rule bg-transparent px-3.5 text-[0.875rem] font-medium text-ink cursor-pointer transition-all duration-150 hover:bg-surface active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
+        </Button>
+        <Button
+          variant="outline"
           disabled={saving || lesson.status !== "unread"}
           onClick={() => markStatus("skipped")}
         >
           {isSkipped ? "Skipped" : "Skip this one"}
-        </button>
+        </Button>
       </div>
     </article>
   );
