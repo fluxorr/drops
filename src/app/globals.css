@@ -6,348 +6,318 @@
 }
 
 @theme {
-  --color-canvas: var(--color-canvas-val);
-  --color-surface: var(--color-surface-val);
-  --color-ink: var(--color-ink-val);
-  --color-muted: var(--color-muted-val);
-  --color-rule: var(--color-rule-val);
-  --color-accent: var(--color-accent-val);
-  --color-accent-faint: var(--color-accent-faint-val);
-  --color-accent-fg: var(--color-accent-fg-val);
-  --color-signal: var(--color-signal-val);
-  --color-green: var(--color-green-val);
+  --color-canvas: oklch(0.985 0 0);
+  --color-surface: oklch(0.96 0 0);
+  --color-ink: oklch(0.13 0 0);
+  --color-muted: oklch(0.5 0 0);
+  --color-rule: oklch(0.88 0 0);
+  --color-accent: oklch(0.2 0 0);
+  --color-accent-faint: oklch(0.2 0 0 / 0.08);
+  --color-accent-fg: oklch(0.99 0 0);
+  --color-signal: oklch(0.5 0.16 30);
+  --color-green: oklch(0.45 0.12 145);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ═══════════════════════════════════════
    THEMES (Monkeytype-inspired)
-   Each theme is self-contained with both 
-   light and dark variants where applicable.
+   Each theme overrides the same set of
+   --color-* variables via data-theme attr.
    ═══════════════════════════════════════ */
 
-/* ── Default Light ── */
-:root,
-[data-theme="default-light"] {
-  --color-canvas-val: oklch(0.985 0 0);
-  --color-surface-val: oklch(0.96 0 0);
-  --color-ink-val: oklch(0.13 0 0);
-  --color-muted-val: oklch(0.5 0 0);
-  --color-rule-val: oklch(0.88 0 0);
-  --color-accent-val: oklch(0.2 0 0);
-  --color-accent-faint-val: oklch(0.2 0 0 / 0.08);
-  --color-accent-fg-val: oklch(0.99 0 0);
-  --color-signal-val: oklch(0.5 0.16 30);
-  --color-green-val: oklch(0.45 0.12 145);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-canvas-val: oklch(0.13 0 0);
-    --color-surface-val: oklch(0.17 0 0);
-    --color-ink-val: oklch(0.92 0 0);
-    --color-muted-val: oklch(0.6 0 0);
-    --color-rule-val: oklch(0.24 0 0);
-    --color-accent-val: oklch(0.85 0 0);
-    --color-accent-faint-val: oklch(0.85 0 0 / 0.1);
-    --color-accent-fg-val: oklch(0.12 0 0);
-    --color-signal-val: oklch(0.65 0.16 30);
-    --color-green-val: oklch(0.55 0.12 145);
-  }
-}
-
-/* ── Bushido ── Dark, rich crimson + charcoal */
-[data-theme="bushido"] {
-  --color-canvas-val: oklch(0.12 0.01 20);
-  --color-surface-val: oklch(0.16 0.015 20);
-  --color-ink-val: oklch(0.9 0.02 30);
-  --color-muted-val: oklch(0.55 0.02 20);
-  --color-rule-val: oklch(0.22 0.015 20);
-  --color-accent-val: oklch(0.55 0.22 25);
-  --color-accent-faint-val: oklch(0.55 0.22 25 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.6 0.2 40);
-  --color-green-val: oklch(0.52 0.15 145);
+/* ── Serika ── Warm light, high contrast */
+[data-theme="serika"] {
+  --color-canvas: oklch(0.95 0.01 75);
+  --color-surface: oklch(0.9 0.008 75);
+  --color-ink: oklch(0.2 0.02 60);
+  --color-muted: oklch(0.5 0.01 60);
+  --color-rule: oklch(0.85 0.008 75);
+  --color-accent: oklch(0.6 0.18 80);
+  --color-accent-faint: oklch(0.6 0.18 80 / 0.12);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.55 0.16 30);
+  --color-green: oklch(0.5 0.14 145);
 }
 
 /* ── Solarized ── Warm light with teal accents */
 [data-theme="solarized"] {
-  --color-canvas-val: oklch(0.97 0.015 85);
-  --color-surface-val: oklch(0.93 0.012 85);
-  --color-ink-val: oklch(0.2 0.03 240);
-  --color-muted-val: oklch(0.45 0.02 240);
-  --color-rule-val: oklch(0.88 0.015 85);
-  --color-accent-val: oklch(0.55 0.16 190);
-  --color-accent-faint-val: oklch(0.55 0.16 190 / 0.12);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.55 0.16 30);
-  --color-green-val: oklch(0.5 0.14 145);
+  --color-canvas: oklch(0.97 0.015 85);
+  --color-surface: oklch(0.93 0.012 85);
+  --color-ink: oklch(0.2 0.03 240);
+  --color-muted: oklch(0.45 0.02 240);
+  --color-rule: oklch(0.88 0.015 85);
+  --color-accent: oklch(0.55 0.16 190);
+  --color-accent-faint: oklch(0.55 0.16 190 / 0.12);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.55 0.16 30);
+  --color-green: oklch(0.5 0.14 145);
+}
+
+/* ── Bushido ── Dark, rich crimson */
+[data-theme="bushido"] {
+  --color-canvas: oklch(0.12 0.01 20);
+  --color-surface: oklch(0.16 0.015 20);
+  --color-ink: oklch(0.9 0.02 30);
+  --color-muted: oklch(0.55 0.02 20);
+  --color-rule: oklch(0.22 0.015 20);
+  --color-accent: oklch(0.55 0.22 25);
+  --color-accent-faint: oklch(0.55 0.22 25 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.6 0.2 40);
+  --color-green: oklch(0.52 0.15 145);
 }
 
 /* ── Coffee ── Warm browns + cream */
 [data-theme="coffee"] {
-  --color-canvas-val: oklch(0.14 0.025 55);
-  --color-surface-val: oklch(0.18 0.03 55);
-  --color-ink-val: oklch(0.9 0.03 85);
-  --color-muted-val: oklch(0.55 0.02 60);
-  --color-rule-val: oklch(0.22 0.025 55);
-  --color-accent-val: oklch(0.62 0.12 70);
-  --color-accent-faint-val: oklch(0.62 0.12 70 / 0.15);
-  --color-accent-fg-val: oklch(0.12 0.02 55);
-  --color-signal-val: oklch(0.55 0.18 40);
-  --color-green-val: oklch(0.5 0.14 145);
+  --color-canvas: oklch(0.14 0.025 55);
+  --color-surface: oklch(0.18 0.03 55);
+  --color-ink: oklch(0.9 0.03 85);
+  --color-muted: oklch(0.55 0.02 60);
+  --color-rule: oklch(0.22 0.025 55);
+  --color-accent: oklch(0.62 0.12 70);
+  --color-accent-faint: oklch(0.62 0.12 70 / 0.15);
+  --color-accent-fg: oklch(0.12 0.02 55);
+  --color-signal: oklch(0.55 0.18 40);
+  --color-green: oklch(0.5 0.14 145);
 }
 
 /* ── Nord ── Cool arctic blues */
 [data-theme="nord"] {
-  --color-canvas-val: oklch(0.14 0.015 240);
-  --color-surface-val: oklch(0.18 0.018 240);
-  --color-ink-val: oklch(0.92 0.015 240);
-  --color-muted-val: oklch(0.58 0.015 240);
-  --color-rule-val: oklch(0.23 0.015 240);
-  --color-accent-val: oklch(0.68 0.1 210);
-  --color-accent-faint-val: oklch(0.68 0.1 210 / 0.15);
-  --color-accent-fg-val: oklch(0.14 0.015 240);
-  --color-signal-val: oklch(0.6 0.16 30);
-  --color-green-val: oklch(0.55 0.14 150);
+  --color-canvas: oklch(0.14 0.015 240);
+  --color-surface: oklch(0.18 0.018 240);
+  --color-ink: oklch(0.92 0.015 240);
+  --color-muted: oklch(0.58 0.015 240);
+  --color-rule: oklch(0.23 0.015 240);
+  --color-accent: oklch(0.68 0.1 210);
+  --color-accent-faint: oklch(0.68 0.1 210 / 0.15);
+  --color-accent-fg: oklch(0.14 0.015 240);
+  --color-signal: oklch(0.6 0.16 30);
+  --color-green: oklch(0.55 0.14 150);
 }
 
-/* ── Monokai ── Vibrant dark + pink/magenta accent */
+/* ── Monokai ── Vibrant dark + pink/magenta */
 [data-theme="monokai"] {
-  --color-canvas-val: oklch(0.11 0.008 280);
-  --color-surface-val: oklch(0.15 0.012 280);
-  --color-ink-val: oklch(0.92 0.01 80);
-  --color-muted-val: oklch(0.52 0.015 280);
-  --color-rule-val: oklch(0.2 0.01 280);
-  --color-accent-val: oklch(0.62 0.22 330);
-  --color-accent-faint-val: oklch(0.62 0.22 330 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.58 0.2 30);
-  --color-green-val: oklch(0.55 0.16 145);
+  --color-canvas: oklch(0.11 0.008 280);
+  --color-surface: oklch(0.15 0.012 280);
+  --color-ink: oklch(0.92 0.01 80);
+  --color-muted: oklch(0.52 0.015 280);
+  --color-rule: oklch(0.2 0.01 280);
+  --color-accent: oklch(0.62 0.22 330);
+  --color-accent-faint: oklch(0.62 0.22 330 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.58 0.2 30);
+  --color-green: oklch(0.55 0.16 145);
 }
 
 /* ── Dracula ── Deep purple/pink */
 [data-theme="dracula"] {
-  --color-canvas-val: oklch(0.12 0.025 300);
-  --color-surface-val: oklch(0.16 0.03 300);
-  --color-ink-val: oklch(0.9 0.02 60);
-  --color-muted-val: oklch(0.5 0.03 300);
-  --color-rule-val: oklch(0.2 0.025 300);
-  --color-accent-val: oklch(0.65 0.22 330);
-  --color-accent-faint-val: oklch(0.65 0.22 330 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.58 0.2 30);
-  --color-green-val: oklch(0.55 0.16 145);
+  --color-canvas: oklch(0.12 0.025 300);
+  --color-surface: oklch(0.16 0.03 300);
+  --color-ink: oklch(0.9 0.02 60);
+  --color-muted: oklch(0.5 0.03 300);
+  --color-rule: oklch(0.2 0.025 300);
+  --color-accent: oklch(0.65 0.22 330);
+  --color-accent-faint: oklch(0.65 0.22 330 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.58 0.2 30);
+  --color-green: oklch(0.55 0.16 145);
 }
 
-/* ── Tokyo Night ── Deep blue/purple night */
+/* ── Tokyo Night ── Deep blue/purple */
 [data-theme="tokyo-night"] {
-  --color-canvas-val: oklch(0.1 0.02 260);
-  --color-surface-val: oklch(0.14 0.025 260);
-  --color-ink-val: oklch(0.92 0.015 240);
-  --color-muted-val: oklch(0.48 0.02 260);
-  --color-rule-val: oklch(0.18 0.02 260);
-  --color-accent-val: oklch(0.65 0.18 250);
-  --color-accent-faint-val: oklch(0.65 0.18 250 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.58 0.18 30);
-  --color-green-val: oklch(0.55 0.16 150);
+  --color-canvas: oklch(0.1 0.02 260);
+  --color-surface: oklch(0.14 0.025 260);
+  --color-ink: oklch(0.92 0.015 240);
+  --color-muted: oklch(0.48 0.02 260);
+  --color-rule: oklch(0.18 0.02 260);
+  --color-accent: oklch(0.65 0.18 250);
+  --color-accent-faint: oklch(0.65 0.18 250 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.58 0.18 30);
+  --color-green: oklch(0.55 0.16 150);
 }
 
 /* ── Everforest ── Earthy dark green */
 [data-theme="everforest"] {
-  --color-canvas-val: oklch(0.13 0.015 150);
-  --color-surface-val: oklch(0.17 0.02 150);
-  --color-ink-val: oklch(0.9 0.02 90);
-  --color-muted-val: oklch(0.52 0.015 140);
-  --color-rule-val: oklch(0.2 0.015 150);
-  --color-accent-val: oklch(0.58 0.14 145);
-  --color-accent-faint-val: oklch(0.58 0.14 145 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.55 0.18 40);
-  --color-green-val: oklch(0.55 0.15 145);
+  --color-canvas: oklch(0.13 0.015 150);
+  --color-surface: oklch(0.17 0.02 150);
+  --color-ink: oklch(0.9 0.02 90);
+  --color-muted: oklch(0.52 0.015 140);
+  --color-rule: oklch(0.2 0.015 150);
+  --color-accent: oklch(0.58 0.14 145);
+  --color-accent-faint: oklch(0.58 0.14 145 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.55 0.18 40);
+  --color-green: oklch(0.55 0.15 145);
 }
 
 /* ── Catppuccin ── Soft dark mauve */
 [data-theme="catppuccin"] {
-  --color-canvas-val: oklch(0.14 0.015 320);
-  --color-surface-val: oklch(0.18 0.02 320);
-  --color-ink-val: oklch(0.92 0.01 60);
-  --color-muted-val: oklch(0.52 0.015 320);
-  --color-rule-val: oklch(0.22 0.015 320);
-  --color-accent-val: oklch(0.62 0.15 350);
-  --color-accent-faint-val: oklch(0.62 0.15 350 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.56 0.18 30);
-  --color-green-val: oklch(0.53 0.14 150);
-}
-
-/* ── Serika ── Warm light, high contrast (Monkeytype Serika) */
-[data-theme="serika"] {
-  --color-canvas-val: oklch(0.95 0.01 75);
-  --color-surface-val: oklch(0.9 0.008 75);
-  --color-ink-val: oklch(0.2 0.02 60);
-  --color-muted-val: oklch(0.5 0.01 60);
-  --color-rule-val: oklch(0.85 0.008 75);
-  --color-accent-val: oklch(0.6 0.18 80);
-  --color-accent-faint-val: oklch(0.6 0.18 80 / 0.12);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.55 0.16 30);
-  --color-green-val: oklch(0.5 0.14 145);
+  --color-canvas: oklch(0.14 0.015 320);
+  --color-surface: oklch(0.18 0.02 320);
+  --color-ink: oklch(0.92 0.01 60);
+  --color-muted: oklch(0.52 0.015 320);
+  --color-rule: oklch(0.22 0.015 320);
+  --color-accent: oklch(0.62 0.15 350);
+  --color-accent-faint: oklch(0.62 0.15 350 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.56 0.18 30);
+  --color-green: oklch(0.53 0.14 150);
 }
 
 /* ── Miami ── Neon pink/blue retro */
 [data-theme="miami"] {
-  --color-canvas-val: oklch(0.12 0.02 300);
-  --color-surface-val: oklch(0.16 0.025 300);
-  --color-ink-val: oklch(0.92 0.01 30);
-  --color-muted-val: oklch(0.5 0.02 300);
-  --color-rule-val: oklch(0.2 0.02 300);
-  --color-accent-val: oklch(0.7 0.25 340);
-  --color-accent-faint-val: oklch(0.7 0.25 340 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.6 0.22 30);
-  --color-green-val: oklch(0.55 0.16 150);
+  --color-canvas: oklch(0.12 0.02 300);
+  --color-surface: oklch(0.16 0.025 300);
+  --color-ink: oklch(0.92 0.01 30);
+  --color-muted: oklch(0.5 0.02 300);
+  --color-rule: oklch(0.2 0.02 300);
+  --color-accent: oklch(0.7 0.25 340);
+  --color-accent-faint: oklch(0.7 0.25 340 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.6 0.22 30);
+  --color-green: oklch(0.55 0.16 150);
 }
 
 /* ── Nebula ── Deep purple/blue space */
 [data-theme="nebula"] {
-  --color-canvas-val: oklch(0.08 0.025 270);
-  --color-surface-val: oklch(0.12 0.03 270);
-  --color-ink-val: oklch(0.9 0.02 280);
-  --color-muted-val: oklch(0.45 0.02 270);
-  --color-rule-val: oklch(0.16 0.025 270);
-  --color-accent-val: oklch(0.6 0.2 270);
-  --color-accent-faint-val: oklch(0.6 0.2 270 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.55 0.18 30);
-  --color-green-val: oklch(0.5 0.14 145);
+  --color-canvas: oklch(0.08 0.025 270);
+  --color-surface: oklch(0.12 0.03 270);
+  --color-ink: oklch(0.9 0.02 280);
+  --color-muted: oklch(0.45 0.02 270);
+  --color-rule: oklch(0.16 0.025 270);
+  --color-accent: oklch(0.6 0.2 270);
+  --color-accent-faint: oklch(0.6 0.2 270 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.55 0.18 30);
+  --color-green: oklch(0.5 0.14 145);
 }
 
 /* ── Matcha ── Soft green tea */
 [data-theme="matcha"] {
-  --color-canvas-val: oklch(0.95 0.015 120);
-  --color-surface-val: oklch(0.9 0.012 120);
-  --color-ink-val: oklch(0.15 0.02 130);
-  --color-muted-val: oklch(0.45 0.015 120);
-  --color-rule-val: oklch(0.85 0.01 120);
-  --color-accent-val: oklch(0.55 0.14 145);
-  --color-accent-faint-val: oklch(0.55 0.14 145 / 0.12);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.5 0.16 30);
-  --color-green-val: oklch(0.5 0.14 145);
+  --color-canvas: oklch(0.95 0.015 120);
+  --color-surface: oklch(0.9 0.012 120);
+  --color-ink: oklch(0.15 0.02 130);
+  --color-muted: oklch(0.45 0.015 120);
+  --color-rule: oklch(0.85 0.01 120);
+  --color-accent: oklch(0.55 0.14 145);
+  --color-accent-faint: oklch(0.55 0.14 145 / 0.12);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.5 0.16 30);
+  --color-green: oklch(0.5 0.14 145);
 }
 
 /* ── Cherry ── Dark red/cherry blossom */
 [data-theme="cherry"] {
-  --color-canvas-val: oklch(0.1 0.02 20);
-  --color-surface-val: oklch(0.14 0.025 20);
-  --color-ink-val: oklch(0.9 0.02 30);
-  --color-muted-val: oklch(0.5 0.02 20);
-  --color-rule-val: oklch(0.18 0.02 20);
-  --color-accent-val: oklch(0.55 0.22 10);
-  --color-accent-faint-val: oklch(0.55 0.22 10 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.55 0.2 30);
-  --color-green-val: oklch(0.5 0.14 145);
+  --color-canvas: oklch(0.1 0.02 20);
+  --color-surface: oklch(0.14 0.025 20);
+  --color-ink: oklch(0.9 0.02 30);
+  --color-muted: oklch(0.5 0.02 20);
+  --color-rule: oklch(0.18 0.02 20);
+  --color-accent: oklch(0.55 0.22 10);
+  --color-accent-faint: oklch(0.55 0.22 10 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.55 0.2 30);
+  --color-green: oklch(0.5 0.14 145);
 }
 
 /* ── Midnight ── Very dark blue */
 [data-theme="midnight"] {
-  --color-canvas-val: oklch(0.06 0.015 260);
-  --color-surface-val: oklch(0.1 0.02 260);
-  --color-ink-val: oklch(0.88 0.015 250);
-  --color-muted-val: oklch(0.42 0.015 260);
-  --color-rule-val: oklch(0.14 0.015 260);
-  --color-accent-val: oklch(0.5 0.15 260);
-  --color-accent-faint-val: oklch(0.5 0.15 260 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.5 0.18 30);
-  --color-green-val: oklch(0.48 0.14 150);
+  --color-canvas: oklch(0.06 0.015 260);
+  --color-surface: oklch(0.1 0.02 260);
+  --color-ink: oklch(0.88 0.015 250);
+  --color-muted: oklch(0.42 0.015 260);
+  --color-rule: oklch(0.14 0.015 260);
+  --color-accent: oklch(0.5 0.15 260);
+  --color-accent-faint: oklch(0.5 0.15 260 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.5 0.18 30);
+  --color-green: oklch(0.48 0.14 150);
 }
 
 /* ── Olivia ── Light warm with paprika */
 [data-theme="olivia"] {
-  --color-canvas-val: oklch(0.96 0.01 60);
-  --color-surface-val: oklch(0.92 0.008 60);
-  --color-ink-val: oklch(0.15 0.02 40);
-  --color-muted-val: oklch(0.45 0.01 45);
-  --color-rule-val: oklch(0.86 0.008 60);
-  --color-accent-val: oklch(0.6 0.2 25);
-  --color-accent-faint-val: oklch(0.6 0.2 25 / 0.12);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.52 0.18 30);
-  --color-green-val: oklch(0.48 0.14 145);
+  --color-canvas: oklch(0.96 0.01 60);
+  --color-surface: oklch(0.92 0.008 60);
+  --color-ink: oklch(0.15 0.02 40);
+  --color-muted: oklch(0.45 0.01 45);
+  --color-rule: oklch(0.86 0.008 60);
+  --color-accent: oklch(0.6 0.2 25);
+  --color-accent-faint: oklch(0.6 0.2 25 / 0.12);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.52 0.18 30);
+  --color-green: oklch(0.48 0.14 145);
 }
 
 /* ── Laser ── Dark neon cyan */
 [data-theme="laser"] {
-  --color-canvas-val: oklch(0.08 0.02 240);
-  --color-surface-val: oklch(0.12 0.025 240);
-  --color-ink-val: oklch(0.92 0.02 200);
-  --color-muted-val: oklch(0.45 0.02 240);
-  --color-rule-val: oklch(0.16 0.02 240);
-  --color-accent-val: oklch(0.65 0.2 200);
-  --color-accent-faint-val: oklch(0.65 0.2 200 / 0.15);
-  --color-accent-fg-val: oklch(0.08 0.02 240);
-  --color-signal-val: oklch(0.55 0.18 30);
-  --color-green-val: oklch(0.52 0.14 150);
+  --color-canvas: oklch(0.08 0.02 240);
+  --color-surface: oklch(0.12 0.025 240);
+  --color-ink: oklch(0.92 0.02 200);
+  --color-muted: oklch(0.45 0.02 240);
+  --color-rule: oklch(0.16 0.02 240);
+  --color-accent: oklch(0.65 0.2 200);
+  --color-accent-faint: oklch(0.65 0.2 200 / 0.15);
+  --color-accent-fg: oklch(0.08 0.02 240);
+  --color-signal: oklch(0.55 0.18 30);
+  --color-green: oklch(0.52 0.14 150);
 }
 
 /* ── Striker ── Dark high contrast amber */
 [data-theme="striker"] {
-  --color-canvas-val: oklch(0.1 0.01 60);
-  --color-surface-val: oklch(0.14 0.015 60);
-  --color-ink-val: oklch(0.9 0.02 70);
-  --color-muted-val: oklch(0.48 0.015 60);
-  --color-rule-val: oklch(0.18 0.012 60);
-  --color-accent-val: oklch(0.65 0.22 55);
-  --color-accent-faint-val: oklch(0.65 0.22 55 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.55 0.2 30);
-  --color-green-val: oklch(0.52 0.14 145);
+  --color-canvas: oklch(0.1 0.01 60);
+  --color-surface: oklch(0.14 0.015 60);
+  --color-ink: oklch(0.9 0.02 70);
+  --color-muted: oklch(0.48 0.015 60);
+  --color-rule: oklch(0.18 0.012 60);
+  --color-accent: oklch(0.65 0.22 55);
+  --color-accent-faint: oklch(0.65 0.22 55 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.55 0.2 30);
+  --color-green: oklch(0.52 0.14 145);
 }
 
 /* ── Sky ── Light airy blue */
 [data-theme="sky"] {
-  --color-canvas-val: oklch(0.97 0.01 240);
-  --color-surface-val: oklch(0.93 0.008 240);
-  --color-ink-val: oklch(0.12 0.02 250);
-  --color-muted-val: oklch(0.45 0.015 240);
-  --color-rule-val: oklch(0.87 0.008 240);
-  --color-accent-val: oklch(0.55 0.14 220);
-  --color-accent-faint-val: oklch(0.55 0.14 220 / 0.12);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.5 0.16 30);
-  --color-green-val: oklch(0.47 0.14 145);
+  --color-canvas: oklch(0.97 0.01 240);
+  --color-surface: oklch(0.93 0.008 240);
+  --color-ink: oklch(0.12 0.02 250);
+  --color-muted: oklch(0.45 0.015 240);
+  --color-rule: oklch(0.87 0.008 240);
+  --color-accent: oklch(0.55 0.14 220);
+  --color-accent-faint: oklch(0.55 0.14 220 / 0.12);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.5 0.16 30);
+  --color-green: oklch(0.47 0.14 145);
 }
 
 /* ── Terra ── Earthy terracotta */
 [data-theme="terra"] {
-  --color-canvas-val: oklch(0.14 0.02 50);
-  --color-surface-val: oklch(0.18 0.025 50);
-  --color-ink-val: oklch(0.9 0.02 60);
-  --color-muted-val: oklch(0.52 0.015 50);
-  --color-rule-val: oklch(0.22 0.02 50);
-  --color-accent-val: oklch(0.55 0.18 50);
-  --color-accent-faint-val: oklch(0.55 0.18 50 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.55 0.2 30);
-  --color-green-val: oklch(0.5 0.14 145);
+  --color-canvas: oklch(0.14 0.02 50);
+  --color-surface: oklch(0.18 0.025 50);
+  --color-ink: oklch(0.9 0.02 60);
+  --color-muted: oklch(0.52 0.015 50);
+  --color-rule: oklch(0.22 0.02 50);
+  --color-accent: oklch(0.55 0.18 50);
+  --color-accent-faint: oklch(0.55 0.18 50 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.55 0.2 30);
+  --color-green: oklch(0.5 0.14 145);
 }
 
 /* ── Aubergine ── Deep purple eggplant */
 [data-theme="aubergine"] {
-  --color-canvas-val: oklch(0.1 0.025 300);
-  --color-surface-val: oklch(0.14 0.03 300);
-  --color-ink-val: oklch(0.9 0.02 310);
-  --color-muted-val: oklch(0.48 0.025 300);
-  --color-rule-val: oklch(0.18 0.025 300);
-  --color-accent-val: oklch(0.55 0.18 300);
-  --color-accent-faint-val: oklch(0.55 0.18 300 / 0.15);
-  --color-accent-fg-val: oklch(0.98 0 0);
-  --color-signal-val: oklch(0.52 0.18 30);
-  --color-green-val: oklch(0.48 0.14 145);
+  --color-canvas: oklch(0.1 0.025 300);
+  --color-surface: oklch(0.14 0.03 300);
+  --color-ink: oklch(0.9 0.02 310);
+  --color-muted: oklch(0.48 0.025 300);
+  --color-rule: oklch(0.18 0.025 300);
+  --color-accent: oklch(0.55 0.18 300);
+  --color-accent-faint: oklch(0.55 0.18 300 / 0.15);
+  --color-accent-fg: oklch(0.98 0 0);
+  --color-signal: oklch(0.52 0.18 30);
+  --color-green: oklch(0.48 0.14 145);
 }
 
 /* ── Base styles ── */

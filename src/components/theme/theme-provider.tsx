@@ -10,7 +10,6 @@ export function ThemeProvider({
     <NextThemesProvider
       attribute="data-theme"
       defaultTheme="default-light"
-      enableSystem
       themes={[
         "default-light",
         "serika",
